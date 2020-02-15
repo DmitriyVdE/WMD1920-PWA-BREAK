@@ -3,19 +3,19 @@
 Figma link: https://www.figma.com/file/NVXP8sWTe3zxCV16ncIiMi/PWA-Odisee?node-id=0%3A1
 
 API Installation:
-  npm install --save-dev nodemon
-  npm install express --save
-  npm install mongoose --save
-  npm install cors --save
-  npm install body-parser --save
+  - npm install --save-dev nodemon
+  - npm install express --save
+  - npm install mongoose --save
+  - npm install cors --save
+  - npm install body-parser --save
   
 Run API:
-  npm run start
+  - npm run start
 
 Mongodb Info:   
-  User: dbAPI
-  Pass: *33Cla@CIivn
-  Conn Str: mongodb+srv://dbAPI:*33Cla@CIivn@main-sb6gn.gcp.mongodb.net/test?retryWrites=true&w=majority
+  - User: dbAPI
+  - Pass: *33Cla@CIivn
+  - Conn Str: mongodb+srv://dbAPI:*33Cla@CIivn@main-sb6gn.gcp.mongodb.net/test?retryWrites=true&w=majority
   
   Example Code Block:
   const MongoClient = require('mongodb').MongoClient;
