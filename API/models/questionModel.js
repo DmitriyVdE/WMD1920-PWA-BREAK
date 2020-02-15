@@ -14,11 +14,11 @@ var QuestionSchema = new Schema({
     default: Date.now
   },
   users: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref:'User'
   }
 },{
   timestamps: true
 });
   
-module.exports = mongoose.model('Question', QuestionSchema);
+mongoose.model('Question', QuestionSchema);

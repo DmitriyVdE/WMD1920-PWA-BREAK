@@ -6,14 +6,22 @@ const app = express();
 
 // middlewares
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 mongoose.connect('mongodb+srv://dbAPI:*33Cla@CIivn@main-sb6gn.gcp.mongodb.net/test?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
 
-// routes
-app.use(require('./routes'));
+// models
+require('./models/userModel');
+require('./models/groupModel');
+require('./models/questionModel');
 
-app.listen(3000, () => console.log('server on!'));
+// routes
+// Import routes
+let apiRoutes = require("./routes/wmdRoutes")
+// Use Api routes in the App
+app.use('/api', apiRoutes)
+
+app.listen(3000, () => console.log(`Server is running on 3000!`));

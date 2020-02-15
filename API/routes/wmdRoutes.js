@@ -1,33 +1,49 @@
 'use strict';
-module.exports = function(app) {
-  // mwd End Poins
-  var wmdEP = require('../controllers/wmdController');
+// Filename: api-routes.js
+// Initialize express router
+let router = require('express').Router();
 
-  // todoList Routes
-  app.route('/users')
-    .post(wmdEP.create_user);
+// Set default API response
+router
+  .get('/', function (req, res) {
+    res.json({
+        status: 'API Is Live',
+        message: 'Welcome to the \'I want a break\'-API!'
+    });
+});
 
-  app.route('/groups')
-    .post(wmdEP.create_group);
-  
-  app.route('/groups/:groupId')
-    .get(wmdEP.get_group_info)
-    .post(wmdEP.add_group_owner)
-    .put(wmdEP.update_group_info)
-    .delete(wmdEP.delete_group);
+// mwd End Poins
+var wmdUserController = require('../controllers/user/user');
+var wmdGroupController = require('../controllers/group/group');
+var wmdQuestionController = require('../controllers/question/question');
 
-  app.route('/groups/:groupId/users')
-    .get(wmdEP.get_group_users)
-    .post(wmdEP.add_group_user)
-    .delete(wmdEP.delete_group_user); // Array of userId's -> deletes every id in array
+// wmdRoutes
+router.route('/users')
+  .post(wmdUserController.create_user);
 
-  app.route('/groups/:groupId/questions')
-    .get(wmdEP.get_group_questions)
-    .post(wmdEP.create_group_question)
-    .put(wmdEP.update_group_question)
-    .delete(wmdEP.delete_group_question);
+router.route('/groups')
+  .post(wmdGroupController.create_group);
 
-  app.route('/groups/:groupId/questions/:questionId')
-    .post(wmdEP.add_question_user)
-    .delete(wmdEP.delete_question_user);
-};
+router.route('/groups/:groupId')
+  .get(wmdGroupController.get_group_info)
+  .post(wmdGroupController.add_group_owner)
+  .put(wmdGroupController.update_group_info)
+  .delete(wmdGroupController.delete_group);
+
+router.route('/groups/:groupId/users')
+  .get(wmdGroupController.get_group_users)
+  .post(wmdGroupController.add_group_user)
+  .delete(wmdGroupController.delete_group_user); // Array of userId's -> deletes every id in array
+
+router.route('/groups/:groupId/questions')
+  .get(wmdQuestionController.get_group_questions)
+  .post(wmdQuestionController.create_group_question)
+  .put(wmdQuestionController.update_group_question)
+  .delete(wmdQuestionController.delete_group_question);
+
+router.route('/groups/:groupId/questions/:questionId')
+  .post(wmdQuestionController.add_question_user)
+  .delete(wmdQuestionController.delete_question_user);
+
+// Export API routes
+module.exports = router;

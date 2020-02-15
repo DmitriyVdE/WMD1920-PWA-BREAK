@@ -32,4 +32,4 @@ var GroupSchema = new Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('Group', GroupSchema);
+mongoose.model('Group', GroupSchema);
