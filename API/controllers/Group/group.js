@@ -4,36 +4,20 @@ const User = mongoose.model('User');
 const Group = mongoose.model('Group');
 const Question = mongoose.model('Question');
 
-function checkGroupExists(code) {
-  console.log('In check group exists.');
-  Group.exists({ groupCode: code }).then(function(result) {
-    console.log(result);
-    if (result) {
-      console.log('true');
-      return true;
-    } else {
-      console.log('false');
-      return false;
-    }
-  });
-}
-
 exports.create_group = async function(req, res) {
-  var temp = req;
+  const temp = req;
   if (temp.body.userId == null || temp.body.groupName == null || temp.body.password == null ) {
     res.status(400).send({ error: 'Please make sure you add a \'userId\', \'groupName\' and \'password\'.'});
     return;
   }
 
-  var new_id = 'HEX8ES';
-  while (checkGroupExists(new_id)) {
-    console.log(new_id);
-    new_id = makeid(6);
-    console.log(new_id);
+  let newCode = makeid(6);
+  while (await checkGroupCodeExists(newCode)) {
+    newCode = makeid(6);
   }
 
-  var new_group = new Group();
-  new_group.groupCode = new_id;
+  let new_group = new Group();
+  new_group.groupCode = newCode;
   new_group.groupName = req.body.groupName;
   new_group.password = req.body.password;
 
@@ -83,11 +67,16 @@ exports.delete_group_users = function(req, res) {
 }
 
 function makeid(length) {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const charactersLength = characters.length;
+  let result           = '';
+  for ( let i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
+}
+
+async function checkGroupCodeExists(code) {
+  const exists = await Group.exists({ groupCode: code });
+  return exists;
 }
