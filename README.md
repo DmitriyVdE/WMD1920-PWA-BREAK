@@ -21,8 +21,7 @@ API Requests:
 	"userId": "5e58fe564577864ad860104e", // _id of the owner see above //
 	"groupName": "First Group Ever",
 	"password": "SuperSecret"
-}
-Returns Full group info.
+} -> Returns Full group info.
 
 Mongodb Info:   
   - User: dbAPI
