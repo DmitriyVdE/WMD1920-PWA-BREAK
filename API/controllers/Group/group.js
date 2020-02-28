@@ -10,6 +10,8 @@ exports.create_group = async function(req, res) {
     res.status(400).send({ error: 'Please make sure you add a \'userId\', \'groupName\' and \'password\'.'});
     return;
   }
+  // TODO: Add user checkExists in same way as checkGroupCodeExists
+  // TODO: Add the user to users and not only to owners.
 
   let newCode = makeid(6);
   while (await checkGroupCodeExists(newCode)) {
