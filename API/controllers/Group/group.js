@@ -35,12 +35,18 @@ exports.create_group = async function(req, res) {
   });
 }
 
-exports.get_group_info = function(req, res) {
-  Group.find({ groupCode: req.params.groupCode }, function(err, group) {
-    if (err)
-      res.send(err);
-    res.json(group);
-  });
+exports.get_group_info = async function(req, res) {
+  if (req.params.groupId === req.body.groupCode) {
+    await Group.find({ groupCode: req.body.groupCode }, function(err, group) {
+      if (err)
+        res.send(err);
+
+      //TODO: Check if user is in group, if not, add user to group.
+      //TODO: Only return total usercount, current questions with votecounts.
+      
+      res.json(group);
+    });
+  }
 }
 
 exports.add_group_owner = function(req, res) {
