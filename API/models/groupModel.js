@@ -7,11 +7,8 @@ var GroupSchema = new Schema({
     type: String
   },
   groupName: {
-    type: String
-  },
-  created_date: {
-    type: Date,
-    default: Date.now
+    type: String,
+    createIndex: true
   },
   password: {
     type: String

@@ -1,16 +1,17 @@
 'use strict';
 // Filename: api-routes.js
 // Initialize express router
-let router = require('express').Router();
+var express = require('express')
+let router = express.Router();
 
 // Set default API response
 router
   .get('/', function (req, res) {
     res.json({
         status: 'API Is Live',
-        message: 'Welcome to the \'I want a break\'-API!'
+        message: 'Welcome to the \'I want a break\' API!'
     });
-});
+  });
 
 // mwd End Poins
 var wmdUserController = require('../controllers/user/user');
@@ -33,7 +34,7 @@ router.route('/groups/:groupId')
 router.route('/groups/:groupId/users')
   .get(wmdGroupController.get_group_users)
   .post(wmdGroupController.add_group_user)
-  .delete(wmdGroupController.delete_group_user); // Array of userId's -> deletes every id in array
+  .delete(wmdGroupController.delete_group_users); // Array of userId's -> deletes every id in array
 
 router.route('/groups/:groupId/questions')
   .get(wmdQuestionController.get_group_questions)

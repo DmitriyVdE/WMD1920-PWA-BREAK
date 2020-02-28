@@ -9,10 +9,6 @@ var QuestionSchema = new Schema({
   title: {
     type: String
   },
-  created_date: {
-    type: Date,
-    default: Date.now
-  },
   users: {
     type: [Schema.Types.ObjectId],
     ref:'User'
