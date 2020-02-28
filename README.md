@@ -17,6 +17,7 @@ API Requests:
     - POST: Empty Body -> Returns new _id;
   - api/groups:
     - POST:
+
 BODY:
 {
 	"userId": "5e58fe564577864ad860104e", // _id of the owner see above
