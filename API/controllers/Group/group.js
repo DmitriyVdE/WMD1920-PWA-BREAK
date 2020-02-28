@@ -5,13 +5,11 @@ const Group = mongoose.model('Group');
 const Question = mongoose.model('Question');
 
 exports.create_group = async function(req, res) {
-  const temp = req;
-  if (temp.body.userId == null || temp.body.groupName == null || temp.body.password == null ) {
-    res.status(400).send({ error: 'Please make sure you add a \'userId\', \'groupName\' and \'password\'.'});
+  const temp = req.body;
+  if (!await checkUserIdExists(temp.userId) || temp.groupName == null || temp.password == null ) {
+    res.status(400).send({ error: 'Please make sure you add a valid \'userId\', \'groupName\' and \'password\'.'});
     return;
   }
-  // TODO: Add user checkExists in same way as checkGroupCodeExists
-  // TODO: Add the user to users and not only to owners.
 
   let newCode = makeid(6);
   while (await checkGroupCodeExists(newCode)) {
@@ -28,6 +26,7 @@ exports.create_group = async function(req, res) {
       res.send(err);
   }).then( function (doc) {
     new_group.owners.push(doc._id);
+    new_group.users.push(doc._id);
     new_group.save(function(err, group) {
       if (err)
         res.send(err);
@@ -78,7 +77,20 @@ function makeid(length) {
   return result;
 }
 
+async function checkUserIdExists(userId) {
+  try {
+    const exists = await User.exists({ _id: userId });
+    return exists;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function checkGroupCodeExists(code) {
-  const exists = await Group.exists({ groupCode: code });
-  return exists;
+  try {
+    const exists = await Group.exists({ groupCode: code });
+    return exists;
+  } catch (err) {
+    console.log(err);
+  }
 }
