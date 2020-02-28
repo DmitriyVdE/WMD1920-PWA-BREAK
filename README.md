@@ -12,6 +12,17 @@ API Installation:
 Run API:
   - npm run start
 
+API Requests:
+  - api/users:
+    - POST: Empty Body -> Returns new _id;
+  - api/groups:
+    - POST: BODY:   {
+                    	"userId": "5e58fe564577864ad860104e", // _id of the owner see above
+                    	"groupName": "First Group Ever",
+                    	"password": "SuperSecret"
+                    }
+            Returns Full group info.
+
 Mongodb Info:   
   - User: dbAPI
   - Pass: *33Cla@CIivn
