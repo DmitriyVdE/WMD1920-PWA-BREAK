@@ -8,7 +8,7 @@ let router = express.Router();
 router
   .get('/', function (req, res) {
     res.json({
-        status: 'API Is Live',
+        status: 'API is Live!',
         message: 'Welcome to the \'I want a break\' API!'
     });
   });
