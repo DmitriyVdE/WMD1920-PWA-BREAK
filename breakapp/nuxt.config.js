@@ -28,6 +28,9 @@ export default {
       }
     ]
   },
+  server: {
+    port: 3001
+  },
   /*
    ** Customize the progress-bar color
    */
