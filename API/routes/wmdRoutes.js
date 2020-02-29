@@ -32,8 +32,6 @@ router.route('/groups/:groupId')
   .delete(wmdGroupController.delete_group);
 
 router.route('/groups/:groupId/users')
-  .get(wmdGroupController.get_group_users)
-  .post(wmdGroupController.add_group_user)
   .delete(wmdGroupController.delete_group_users); // Array of userId's -> deletes every id in array
 
 router.route('/groups/:groupId/questions')

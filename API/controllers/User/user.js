@@ -7,6 +7,6 @@ exports.create_user = function(req, res) {
   new_user.save(function(err, task) {
     if (err)
       res.send(err);
-    res.json(task);
+    res.json({userId: task._id});
   });
 }
