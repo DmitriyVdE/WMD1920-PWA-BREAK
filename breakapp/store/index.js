@@ -26,5 +26,16 @@ export const actions = {
     }
 
     commit('setAuth', auth) */
+  },
+
+  async joinAsAnonymousUser({ commit }, dog) {
+    await this.$axios
+      .$post('/api/dogs', dog)
+      .then((response) => {
+        return commit('setDogs', response)
+      })
+      .catch((error) => {
+        return error
+      })
   }
 }
