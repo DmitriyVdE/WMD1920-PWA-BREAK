@@ -28,6 +28,9 @@ export default {
       }
     ]
   },
+  server: {
+    port: 3001
+  },
   /*
    ** Customize the progress-bar color
    */
@@ -35,11 +38,14 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~assets/css/globals.css'],
+  styleResources: {
+    scss: '~assets/css/variables.scss'
+  },
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/axios.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -50,7 +56,21 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/pwa'],
+  modules: [
+    '@nuxtjs/pwa',
+    // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/axios',
+    // Doc: https://github.com/nuxt-community/proxy-module
+    '@nuxtjs/proxy'
+  ],
+  axios: {
+    proxy: true
+  },
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:3000'
+    }
+  },
   /*
    ** Build configuration
    */
