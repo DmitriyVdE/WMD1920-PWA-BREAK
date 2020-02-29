@@ -30,47 +30,101 @@ exports.create_group = async function(req, res) {
     new_group.save(function(err, group) {
       if (err)
         res.send(err);
-      res.json(group);
+      res.json({groupCode: group.groupCode, groupName: group.groupName });
     });
   });
 }
 
 exports.get_group_info = async function(req, res) {
-  if (req.params.groupId === req.body.groupCode) {
-    await Group.find({ groupCode: req.body.groupCode }, function(err, group) {
+  if (req.params.groupId === req.body.groupCode && await checkGroupCodeExists(req.body.groupCode)) {
+    Group.findOne({ groupCode: req.body.groupCode }, function(err, group) {
       if (err)
         res.send(err);
 
-      //TODO: Check if user is in group, if not, add user to group.
-      //TODO: Only return total usercount, current questions with votecounts.
-      
-      res.json(group);
+      if (!isUserInGroup(req.body.userId, group.users)) {
+        group.users.push(req.body.userId);
+        group.save();
+      }
+      const isOwner = group.owners.includes(req.body.userId);
+      res.json({groupName: group.groupName, isOwner: isOwner, userCount: group.users.length, questions: group.questions});
     });
+  } else {
+    res.status(400).send({ error: 'Please make sure you are trying to join an existing group.'});
+    return;
   }
 }
 
-exports.add_group_owner = function(req, res) {
-  
+exports.add_group_owner = async function(req, res) {
+  if (req.params.groupId === req.body.groupCode && await checkGroupCodeExists(req.body.groupCode) && await groupPasswordIsCorrect(req.body.groupCode, req.body.password)) {
+    Group.findOne({ groupCode: req.body.groupCode }, function(err, group) {
+      if (err)
+        res.send(err);
+
+      if (!userIsOwner(req.body.userId, group.owners)) {
+        group.owners.push(req.body.userId);
+        group.save();
+      }
+      const isOwner = group.owners.includes(req.body.userId);
+      res.json({groupName: group.groupName, isOwner: isOwner});
+    });
+  } else {
+    res.status(400).send({ error: 'Group does not exist or incorrect password.'});
+    return;
+  }
 }
 
-exports.update_group_info = function(req, res) {
-  
+exports.update_group_info = async function(req, res) {
+  if (req.params.groupId === req.body.groupCode && await checkGroupCodeExists(req.body.groupCode) && req.body.groupName != "") {
+    Group.findOne({ groupCode: req.body.groupCode }, function(err, group) {
+      if (err)
+        res.send(err);
+      let oldGroupName = group.groupName;
+
+      if (userIsOwner(req.body.userId, group.owners)) {
+        group.groupName = req.body.groupName;
+        group.save();
+      }
+
+      res.json({oldGroupName: oldGroupName, newGroupName: group.groupName});
+    });
+  } else {
+    res.status(400).send({ error: 'Group does not exist.'});
+    return;
+  }
 }
 
-exports.delete_group = function(req, res) {
-  
+exports.delete_group = async function(req, res) {
+  if (req.params.groupId === req.body.groupCode && await checkGroupCodeExists(req.body.groupCode) && await groupPasswordIsCorrect(req.body.groupCode, req.body.password)) {
+    Group.findOne({ groupCode: req.body.groupCode }, function(err, group) {
+      if (err)
+        res.send(err);
+
+      let groupName = group.groupName;
+      group.remove();
+
+      res.json({message: 'The group ' + groupName + ' has been deleted.'});
+    });
+  } else {
+    res.status(400).send({ error: 'Group does not exist or password is incorrect.'});
+    return;
+  }
 }
 
-exports.get_group_users = function(req, res) {
-  
-}
+exports.delete_group_users = async function(req, res) {
+  if (req.params.groupId === req.body.groupCode && await checkGroupCodeExists(req.body.groupCode) && await groupPasswordIsCorrect(req.body.groupCode, req.body.password)) {
+    Group.findOne({ groupCode: req.body.groupCode }, function(err, group) {
+      if (err)
+        res.send(err);
 
-exports.add_group_user = function(req, res) {
-  
-}
+      group.users = group.owners;
+      group.save();
 
-exports.delete_group_users = function(req, res) {
-  
+      res.json({message: 'All non-owners have been kicked from the group.'});
+    });
+  } else {
+    res.status(400).send({ error: 'Group does not exist or password is incorrect.'});
+    return;
+  }
 }
 
 function makeid(length) {
@@ -89,6 +143,7 @@ async function checkUserIdExists(userId) {
     return exists;
   } catch (err) {
     console.log(err);
+    return false;
   }
 }
 
@@ -98,5 +153,43 @@ async function checkGroupCodeExists(code) {
     return exists;
   } catch (err) {
     console.log(err);
+    return false;
+  }
+}
+
+function isUserInGroup(userId, memberList) {
+  try {
+    const inGroup = memberList.includes(userId);
+    return inGroup;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+function userIsOwner(userId, ownerList) {
+  try {
+    const inGroup = ownerList.includes(userId);
+    return inGroup;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+async function groupPasswordIsCorrect(code, password) {
+  try {
+    let correct = false;
+    await Group.findOne({ groupCode: code }, function(err, group) {
+      if (group.password == password) {
+        correct = true;
+      } else {
+        correct = false;
+      }
+    });
+    return correct;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 }
