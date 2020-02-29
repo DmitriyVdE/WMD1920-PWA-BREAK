@@ -5,9 +5,9 @@ const Group = mongoose.model('Group');
 const Question = mongoose.model('Question');
 
 exports.create_group = async function(req, res) {
-  const temp = req;
-  if (temp.body.userId == null || temp.body.groupName == null || temp.body.password == null ) {
-    res.status(400).send({ error: 'Please make sure you add a \'userId\', \'groupName\' and \'password\'.'});
+  const temp = req.body;
+  if (!await checkUserIdExists(temp.userId) || temp.groupName == null || temp.password == null ) {
+    res.status(400).send({ error: 'Please make sure you add a valid \'userId\', \'groupName\' and \'password\'.'});
     return;
   }
 
@@ -26,6 +26,7 @@ exports.create_group = async function(req, res) {
       res.send(err);
   }).then( function (doc) {
     new_group.owners.push(doc._id);
+    new_group.users.push(doc._id);
     new_group.save(function(err, group) {
       if (err)
         res.send(err);
@@ -34,12 +35,18 @@ exports.create_group = async function(req, res) {
   });
 }
 
-exports.get_group_info = function(req, res) {
-  Group.find({ groupCode: req.params.groupCode }, function(err, group) {
-    if (err)
-      res.send(err);
-    res.json(group);
-  });
+exports.get_group_info = async function(req, res) {
+  if (req.params.groupId === req.body.groupCode) {
+    await Group.find({ groupCode: req.body.groupCode }, function(err, group) {
+      if (err)
+        res.send(err);
+
+      //TODO: Check if user is in group, if not, add user to group.
+      //TODO: Only return total usercount, current questions with votecounts.
+      
+      res.json(group);
+    });
+  }
 }
 
 exports.add_group_owner = function(req, res) {
@@ -76,7 +83,20 @@ function makeid(length) {
   return result;
 }
 
+async function checkUserIdExists(userId) {
+  try {
+    const exists = await User.exists({ _id: userId });
+    return exists;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function checkGroupCodeExists(code) {
-  const exists = await Group.exists({ groupCode: code });
-  return exists;
+  try {
+    const exists = await Group.exists({ groupCode: code });
+    return exists;
+  } catch (err) {
+    console.log(err);
+  }
 }
