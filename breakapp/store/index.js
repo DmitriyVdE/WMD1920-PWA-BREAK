@@ -1,38 +1,56 @@
 // const cookieparser = process.server ? require('cookieparser') : undefined
-// const Cookie = process.client ? require('js-cookie') : undefined
+const Cookies = process.client ? require('js-cookie') : undefined
 
 export const state = () => ({
   auth: null
 })
 
 export const mutations = {
-  setAuth(state, auth) {
-    if (typeof auth !== 'object') auth = JSON.parse(auth)
-    state.auth = auth
+  setAuth(state, data) {
+    state.auth = { user: { id: data } }
+    Cookies.set('auth', state.auth)
   }
 }
 
 export const actions = {
   nuxtServerInit({ commit }, { req }) {
-    /* let auth = null
-
     if (req.headers.cookie) {
-      const parsed = cookieparser.parse(req.headers.cookie)
       try {
-        auth = parsed.auth
-      } catch (err) {
-        console.log('Jwt error: ' + err)
+        this.setAuthFromCookie()
+      } catch (error) {
+        return error
       }
     }
-
-    commit('setAuth', auth) */
   },
 
-  async joinAsAnonymousUser({ commit }, dog) {
+  getUserId({ commit, dispatch }) {
+    dispatch('authCookieIsSet').then((cookieIsSet) => {
+      if (cookieIsSet) {
+        dispatch('setAuthFromCookie').then(() => {
+          console.log('state: ' + state)
+
+          return state.auth.user.id
+        })
+      } else {
+        return dispatch('createAnonymousUser', commit)
+      }
+    })
+  },
+
+  setAuthFromCookie({ commit }) {
+    const authCookie = JSON.parse(Cookies.get('auth'))
+    commit('setAuth', authCookie.user.id)
+  },
+
+  authCookieIsSet() {
+    return Cookies.get('auth') !== undefined
+  },
+
+  async createAnonymousUser({ commit }) {
     await this.$axios
-      .$post('/api/dogs', dog)
+      .$post('/api/users')
       .then((response) => {
-        return commit('setDogs', response)
+        return commit('setAuth', response._id)
       })
       .catch((error) => {
         return error
