@@ -32,4 +32,13 @@ let apiRoutes = require("./routes/wmdRoutes");
 // Use Api routes in the App
 app.use("/api", apiRoutes);
 
-app.listen(3000, () => console.log(`Server is running on 3000!`));
+const PORT = process.env.PORT || 8080;
+const server = app.listen(PORT, () => {
+    const host = server.address().address;
+    const port = server.address().port;
+  
+    console.log(`Example app listening at http://${host}:${port}`);
+  });
+
+module.exports = app;
+//app.listen(3000, () => console.log(`Server is running on 3000!`));
