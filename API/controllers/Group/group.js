@@ -6,7 +6,7 @@ const Question = mongoose.model('Question');
 
 exports.create_group = async function(req, res) {
   const temp = req.body;
-  if (!await checkUserIdExists(temp.userId) || temp.groupName == null || temp.password == null ) {
+  if (!await checkUserIdExists(temp.userId) || temp.groupName == "" || temp.password == "" ) {
     res.status(400).send({ error: 'Please make sure you add a valid \'userId\', \'groupName\' and \'password\'.'});
     return;
   }
@@ -35,9 +35,10 @@ exports.create_group = async function(req, res) {
   });
 }
 
+// Add toUpper to groupCode input.
 exports.get_group_info = async function(req, res) {
   if (req.params.groupId === req.body.groupCode && await checkGroupCodeExists(req.body.groupCode)) {
-    Group.findOne({ groupCode: req.body.groupCode }, function(err, group) {
+    Group.findOne({ groupCode: req.body.groupCode }, async function(err, group) {
       if (err)
         res.send(err);
 
@@ -46,7 +47,15 @@ exports.get_group_info = async function(req, res) {
         group.save();
       }
       const isOwner = group.owners.includes(req.body.userId);
-      res.json({groupName: group.groupName, isOwner: isOwner, userCount: group.users.length, questions: group.questions});
+
+      let questions = await Question.find({ '_id': { $in: group.questions } })
+
+      let filtered = [];
+      questions.forEach(question => {
+        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length })
+      })
+
+      res.json({ groupName: group.groupName, isOwner: isOwner, userCount: group.users.length, questions: filtered });
     });
   } else {
     res.status(400).send({ error: 'Please make sure you are trying to join an existing group.'});
@@ -65,7 +74,7 @@ exports.add_group_owner = async function(req, res) {
         group.save();
       }
       const isOwner = group.owners.includes(req.body.userId);
-      res.json({groupName: group.groupName, isOwner: isOwner});
+      res.json({groupName: group.groupName, 'userId': req.body.userId, isOwner: isOwner});
     });
   } else {
     res.status(400).send({ error: 'Group does not exist or incorrect password.'});
