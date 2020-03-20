@@ -68,7 +68,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'http://localhost:3000'
+      target: 'http://10.108.80.61:3000'
     }
   },
   /*

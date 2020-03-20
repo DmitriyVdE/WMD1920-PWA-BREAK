@@ -1,19 +1,20 @@
 <template>
   <div class="wrapper-receive-code">
-    <div class="wrapper-heading">
-      <p>{{ groupName }}</p>
-      <p class="subtitle">Your group code</p>
+    <div v-if="currentGroup">
+      <div class="wrapper-heading">
+        <p>{{ currentGroup.name }}</p>
+        <p class="subtitle">Your group code</p>
+      </div>
+      <p>{{ currentGroup.code }}</p>
     </div>
-    <p>{{ code }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      groupName: 'SomeGroupName',
-      code: 'QWSJSN'
+  computed: {
+    currentGroup() {
+      return this.$store.state.group.currentGroup
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper-button">
     <div id="button-background">
-      <button type="button">{{ text }}</button>
+      <button type="submit" value="Submit">{{ text }}</button>
     </div>
   </div>
 </template>

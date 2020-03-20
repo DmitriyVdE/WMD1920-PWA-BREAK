@@ -10,23 +10,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
 import Logo from '~/components/Logo.vue'
 
 export default {
   components: {
     Logo
-  },
-  async mounted() {
-    const userId = await this.getUserId()
-    console.log('userId: ' + userId)
-    return userId
-  },
-  methods: {
-    ...mapActions({
-      getUserId: 'getUserId'
-    })
   }
 }
 </script>
