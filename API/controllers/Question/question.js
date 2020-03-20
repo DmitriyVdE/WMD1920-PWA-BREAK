@@ -34,10 +34,10 @@ exports.create_group_question = async function(req, res) {
       if (userIsOwner(req.body.userId, group.owners)) {
         let question = new Question();
         question.title = req.body.question;
-        question.save();
+        await question.save();
 
         group.questions.push(question);
-        group.save();
+        await group.save();
       }
 
       let questions = await Question.find({ '_id': { $in: group.questions } })
