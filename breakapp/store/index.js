@@ -1,4 +1,3 @@
-// const cookieparser = process.server ? require('cookieparser') : undefined
 const Cookies = process.client ? require('js-cookie') : undefined
 
 export const state = () => ({
@@ -23,22 +22,18 @@ export const actions = {
     }
   },
 
-  getUserId({ commit, dispatch }) {
+  getUserId({ dispatch }) {
     dispatch('authCookieIsSet').then((cookieIsSet) => {
       if (cookieIsSet) {
-        dispatch('setAuthFromCookie').then(() => {
-          console.log('state: ' + state)
-
-          return state.auth.user.id
-        })
+        dispatch('setAuthFromCookie')
       } else {
-        return dispatch('createAnonymousUser', commit)
+        dispatch('createAnonymousUser')
       }
     })
   },
 
   setAuthFromCookie({ commit }) {
-    const authCookie = JSON.parse(Cookies.get('auth'))
+    const authCookie = JSON.parse(Cookies.get('auth')) // check
     commit('setAuth', authCookie.user.id)
   },
 
@@ -50,7 +45,7 @@ export const actions = {
     await this.$axios
       .$post('/api/users')
       .then((response) => {
-        return commit('setAuth', response._id)
+        return commit('setAuth', response.userId)
       })
       .catch((error) => {
         return error
