@@ -117,9 +117,7 @@ exports.delete_group_question = async function(req, res) {
 }
 
 exports.add_question_user = async function(req, res) {
-  console.log(req.params)
-  console.log(req.body)
-  if (req.params.groupId === req.body.groupId && // CAUSES ERROR
+  if (req.params.groupId === req.body.groupCode &&
     req.params.questionId === req.body.questionId &&
     await checkGroupCodeExists(req.body.groupCode) &&
     await checkUserIdExists(req.body.userId) &&
@@ -128,11 +126,11 @@ exports.add_question_user = async function(req, res) {
       if (err)
         res.send(err);
 
-      console.log(question);
       const user = await User.findById(req.body.userId);
-      question.users.push(user);
-      console.log(question);
-      question.save();
+      if ( !question.users.includes( user._id ) ) {
+        question.users.push(user);
+        question.save();
+      }
 
       res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length });
     });
@@ -143,7 +141,31 @@ exports.add_question_user = async function(req, res) {
 }
 
 exports.delete_question_user = async function(req, res) {
-  
+  if (req.params.groupId === req.body.groupCode &&
+    req.params.questionId === req.body.questionId &&
+    await checkGroupCodeExists(req.body.groupCode) &&
+    await checkUserIdExists(req.body.userId) &&
+    req.params.questionId != "") {
+    Question.findById(req.params.questionId, async function(err, question) {
+      if (err)
+        res.send(err);
+
+      const user = await User.findById(req.body.userId);
+      if ( question.users.includes( user._id ) ) {
+        for( var i = 0; i < question.users.length; i++){
+          if ( question.users[i]._id.toString() == user._id.toString()) {
+            question.users.splice(i, 1);
+          }
+        }
+        question.save();
+      }
+
+      res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length });
+    });
+  } else {
+    res.status(400).send({ error: 'Invalid request or group does not exist.'});
+    return;
+  }
 }
 
 async function checkUserIdExists(userId) {
