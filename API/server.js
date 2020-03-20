@@ -3,6 +3,13 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+// socket.io stuff
+io.on('connection', () => {
+  console.log('a user is connected')
+ })
 
 // middlewares
 app.use(cors());
