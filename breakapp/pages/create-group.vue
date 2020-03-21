@@ -22,11 +22,7 @@
           placeholder="Password"
         ></input-with-icon>
 
-        <div v-if="form.errors.length" class="form-errors">
-          <ul>
-            <li v-for="error in form.errors" :key="error">{{ error }}</li>
-          </ul>
-        </div>
+        <error-list :errors="form.errors"></error-list>
 
         <button-with-background text="Create"></button-with-background>
       </form>
@@ -38,6 +34,7 @@
 import Heading from '@/components/Heading.vue'
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
 import InputWithIcon from '@/components/InputWithIcon.vue'
+import ErrorList from '@/components/ErrorList.vue'
 
 import { mapActions } from 'vuex'
 
@@ -45,7 +42,8 @@ export default {
   components: {
     Heading,
     ButtonWithBackground,
-    InputWithIcon
+    InputWithIcon,
+    ErrorList
   },
   data() {
     return {
@@ -66,12 +64,7 @@ export default {
     }),
     validateForm() {
       this.clearFormErrors()
-      if (
-        this.form.groupName === null ||
-        this.form.groupName === '' ||
-        this.form.password === null ||
-        this.form.password === ''
-      ) {
+      if (!this.form.groupName || !this.form.password) {
         this.form.errors.push('Group name is required')
         this.form.errors.push('Password name is required')
       } else this.submitForm()
@@ -85,6 +78,7 @@ export default {
         password: this.form.password,
         userId: this.$store.state.auth?.user.id
       }).then(() => {
+        // TODO: Check response code
         this.$router.push('/receive-code')
       })
     }
@@ -103,20 +97,6 @@ export default {
     form {
       #input-password {
         margin-top: 0.7rem;
-      }
-
-      .form-errors {
-        ul {
-          list-style: none;
-          padding: 0;
-
-          li {
-            color: #ff808b;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: left;
-          }
-        }
       }
     }
   }

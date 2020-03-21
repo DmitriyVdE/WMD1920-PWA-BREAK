@@ -7,7 +7,6 @@
         @input="$emit('input', $event.target.value)"
         :type="type"
       />
-      <i id="icon" :class="iconClass"></i>
     </div>
   </div>
 </template>

@@ -1,44 +1,43 @@
-const Cookies = process.client ? require('js-cookie') : undefined
-
 export const state = () => ({
-  auth: null
+  auth: {
+    user: {
+      id: null
+    }
+  }
 })
 
 export const mutations = {
   setAuth(state, data) {
-    state.auth = { user: { id: data } }
-    Cookies.set('auth', state.auth)
+    state.auth.user.id = data
+    this.$cookies.set('auth', state.auth, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7
+    })
   }
 }
 
 export const actions = {
-  nuxtServerInit({ commit }, { req }) {
-    if (req.headers.cookie) {
-      try {
-        this.setAuthFromCookie()
-      } catch (error) {
-        return error
-      }
-    }
+  async nuxtServerInit({ commit, dispatch }, { req }) {
+    await dispatch('getUserId')
   },
 
-  getUserId({ dispatch }) {
-    dispatch('authCookieIsSet').then((cookieIsSet) => {
+  async getUserId({ dispatch }) {
+    await dispatch('authCookieIsSet').then(async (cookieIsSet) => {
       if (cookieIsSet) {
         dispatch('setAuthFromCookie')
       } else {
-        dispatch('createAnonymousUser')
+        await dispatch('createAnonymousUser')
       }
     })
   },
 
   setAuthFromCookie({ commit }) {
-    const authCookie = JSON.parse(Cookies.get('auth')) // check
+    const authCookie = this.$cookies.get('auth')
     commit('setAuth', authCookie.user.id)
   },
 
   authCookieIsSet() {
-    return Cookies.get('auth') !== undefined
+    return this.$cookies.get('auth') !== undefined
   },
 
   async createAnonymousUser({ commit }) {
