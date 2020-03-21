@@ -5,8 +5,8 @@ const Group = mongoose.model('Group');
 const Question = mongoose.model('Question');
 
 exports.get_group_questions = async function(req, res) {
-  if (req.params.groupId === req.body.groupCode && await checkGroupCodeExists(req.body.groupCode) && await checkUserIdExists(req.body.userId)) {
-    Group.findOne({ groupCode: req.body.groupCode }, async function(err, group) {
+  if (await checkGroupCodeExists(req.params.groupId) && await checkUserIdExists(req.params.userId)) {
+    Group.findOne({ groupCode: req.params.groupId }, async function(err, group) {
       if (err)
         res.send(err);
 
