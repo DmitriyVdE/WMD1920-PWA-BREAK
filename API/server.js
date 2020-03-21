@@ -1,8 +1,15 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const express = require("express");
 const app = express();
+//const http = require('http').Server(app);
+//const io = require('socket.io')(http);
+
+// socket.io stuff
+//io.on('connection', () => {
+//  console.log('a user is connected')
+// })
 
 // middlewares
 app.use(cors());
@@ -32,4 +39,12 @@ let apiRoutes = require("./routes/wmdRoutes");
 // Use Api routes in the App
 app.use("/api", apiRoutes);
 
-app.listen(3000, () => console.log(`Server is running on 3000!`));
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () => {
+    const host = server.address().address;
+    const port = server.address().port;
+  
+    console.log(`PWA Break API listening at http://${host}:${port}`);
+  });
+
+module.exports = app;
