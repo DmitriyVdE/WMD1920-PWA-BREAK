@@ -1,16 +1,25 @@
 <template>
-  <div class="wrapper-poll">
+  <div class="wrapper-create">
     <div class="wrapper-header">
-      <heading title="Create a poll"></heading>
+      <heading title="Create a group"></heading>
     </div>
 
     <div class="wrapper-controls">
       <form @submit.prevent="validateForm" method="post">
         <input-with-icon
-          :value="form.question"
-          @input="form.question = $event"
-          placeholder="Poll"
-          icon-class="im im-question"
+          :value="form.groupName"
+          @input="form.groupName = $event"
+          icon-class="im im-users"
+          placeholder="Name"
+        ></input-with-icon>
+
+        <input-with-icon
+          id="input-password"
+          :value="form.password"
+          @input="form.password = $event"
+          type="password"
+          icon-class="im im-lock"
+          placeholder="Password"
         ></input-with-icon>
 
         <error-list :errors="form.errors"></error-list>
@@ -30,7 +39,6 @@ import ErrorList from '@/components/ErrorList.vue'
 import { mapActions } from 'vuex'
 
 export default {
-  middleware: 'isGroupOwner',
   components: {
     Heading,
     ButtonWithBackground,
@@ -40,34 +48,38 @@ export default {
   data() {
     return {
       form: {
-        question: '',
+        groupName: '',
+        password: '',
         errors: []
       }
     }
   },
   async mounted() {
-    await this.getGroupId()
+    await this.getUserId()
   },
   methods: {
     ...mapActions({
-      createPoll: 'group/createPoll',
-      getGroupId: 'getGroupId'
+      createGroup: 'group/createGroup',
+      getUserId: 'getUserId'
     }),
     validateForm() {
       this.clearFormErrors()
-      if (!this.form.question) {
-        this.form.errors.push('Question is required')
+      if (!this.form.groupName || !this.form.password) {
+        this.form.errors.push('Group name is required')
+        this.form.errors.push('Password name is required')
       } else this.submitForm()
     },
     clearFormErrors() {
       this.form.errors = []
     },
     submitForm() {
-      this.createPoll({
-        groupId: this.$store.state.group.currentGroup?.id,
-        question: this.form.question
+      this.createGroup({
+        groupName: this.form.groupName,
+        password: this.form.password,
+        userId: this.$store.state.auth?.user.id
       }).then(() => {
-        // this.$router.push(`/groups/${this.groupId}`)
+        // TODO: Check response code
+        this.$router.push('/receive-code')
       })
     }
   }
@@ -75,13 +87,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper-poll {
+.wrapper-create {
   .wrapper-controls {
     min-height: 100vh;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    form {
+      #input-password {
+        margin-top: 0.7rem;
+      }
+    }
   }
 }
 </style>

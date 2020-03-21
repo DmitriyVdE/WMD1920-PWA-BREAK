@@ -1,8 +1,12 @@
 <template>
   <div class="wrapper-input-with-icon">
     <div class="wrapper-input">
-      <input :placeholder="placeholder" type="text" />
-      <i id="icon" :class="iconClass"></i>
+      <input
+        :placeholder="placeholder"
+        :value="value"
+        @input="$emit('input', $event.target.value)"
+        :type="type"
+      />
     </div>
   </div>
 </template>
@@ -17,6 +21,14 @@ export default {
     iconClass: {
       type: String,
       default: 'im im-users'
+    },
+    value: {
+      type: String,
+      default: ''
+    },
+    type: {
+      type: String,
+      default: 'text'
     }
   }
 }

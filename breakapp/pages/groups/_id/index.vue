@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  middleware: 'isGroupMember',
   validate({ params }) {
     return /^\d+$/.test(params.id)
   },

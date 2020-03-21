@@ -18,6 +18,7 @@
 
 <script>
 export default {
+  middleware: 'isGroupOwner',
   data() {
     return {
       groupName: 'SomeGroupName',

@@ -3,8 +3,11 @@
     <logo id="logo" />
 
     <div class="wrapper-buttons">
-      <nuxt-link to="/create">Create</nuxt-link>
-      <nuxt-link to="/join">Join</nuxt-link>
+      <nuxt-link to="/create-group">Create</nuxt-link>
+      <nuxt-link to="/join-group">Join</nuxt-link>
+      <nuxt-link v-if="isGroupOwner" id="my-groups" to="/my-groups"
+        >My Groups</nuxt-link
+      >
     </div>
   </div>
 </template>
@@ -13,6 +16,11 @@
 import Logo from '~/components/Logo.vue'
 
 export default {
+  data() {
+    return {
+      isGroupOwner: false
+    }
+  },
   components: {
     Logo
   }
@@ -52,6 +60,14 @@ export default {
       }
 
       background: #9698d5;
+
+      &#my-groups {
+        background-color: transparent;
+        color: hsla(260, 3%, 21%, 0.781);
+        font-weight: 400;
+        font-size: 16px;
+        margin-top: 10px;
+      }
     }
   }
 }
