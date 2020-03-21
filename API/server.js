@@ -1,15 +1,16 @@
+//require('@google-cloud/debug-agent').start();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+//const http = require('http').Server(app);
+//const io = require('socket.io')(http);
 
 // socket.io stuff
-io.on('connection', () => {
-  console.log('a user is connected')
- })
+//io.on('connection', () => {
+//  console.log('a user is connected')
+// })
 
 // middlewares
 app.use(cors());
@@ -36,8 +37,7 @@ const server = app.listen(PORT, () => {
     const host = server.address().address;
     const port = server.address().port;
   
-    console.log(`Example app listening at http://${host}:${port}`);
+    console.log(`PWA Break API listening at http://${host}:${port}`);
   });
 
 module.exports = app;
-//app.listen(3000, () => console.log(`Server is running on 3000!`));
