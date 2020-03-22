@@ -55,7 +55,7 @@ exports.get_group_info = async function(req, res) {
         filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length })
       })
 
-      res.json({ groupName: group.groupName, isOwner: isOwner, userCount: group.users.length, questions: filtered })
+      res.json({ groupCode: group.groupCode, groupName: group.groupName, isOwner: isOwner, userCount: group.users.length, questions: filtered })
     })
   } else {
     res.status(400).send({ error: 'Please make sure you are trying to join an existing group.'})

@@ -53,9 +53,9 @@ export const actions = {
     return request
   },
 
-  async getGroupInfo({ commit }, groupId) {
+  async getGroupInfo({ commit }, { groupCode, userId }) {
     const request = await this.$axios
-      .$get(`/api/groups/${groupId}`)
+      .$get(`/api/groups/${groupCode}/${userId}`)
       .then((response) => {
         commit('setCurrentGroup', response)
       })
@@ -66,12 +66,9 @@ export const actions = {
     return request
   },
 
-  async createPoll({ commit }, { groupId, question }) {
-    console.log(`GroupId: ${groupId}`)
-    console.log(`Question: ${question}`)
-
+  async createPoll({ commit }, question) {
     const request = await this.$axios
-      .$post(`/api/groups/${groupId}/questions`, question)
+      .$post(`/api/groups/${question.groupCode}/questions`, question)
       .then((response) => {
         commit('setNewQuestion', response)
       })
