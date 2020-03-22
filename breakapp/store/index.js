@@ -11,7 +11,7 @@ export const mutations = {
     state.auth.user.id = data
     this.$cookies.set('auth', state.auth, {
       path: '/',
-      maxAge: 60 * 60 * 24 * 7
+      maxAge: 60 * 60 * 4
     })
   }
 }

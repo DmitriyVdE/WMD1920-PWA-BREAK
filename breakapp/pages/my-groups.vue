@@ -5,7 +5,9 @@
     <div class="wrapper-groups">
       <ul v-if="groups.length">
         <li v-for="group in groups" :key="group.id">
-          <p>{{ group.name | trimString(16) }}</p>
+          <nuxt-link :to="`/groups/${group.code}`" tag="p">{{
+            group.name | trimString(16)
+          }}</nuxt-link>
           <div class="btn-delete">
             <i class="im im-x-mark icon"></i>
           </div>
@@ -32,13 +34,9 @@ export default {
   components: {
     ButtonNoBackground
   },
-  data() {
-    return {
-      groups: [
-        { id: 1, name: 'group1' },
-        { id: 2, name: 'group2' },
-        { id: 3, name: 'group3' }
-      ]
+  computed: {
+    groups() {
+      return this.$cookies.get('groups')
     }
   }
 }
@@ -76,8 +74,7 @@ export default {
     flex-flow: column nowrap;
     justify-content: center;
     min-width: 85%;
-    margin: 0 auto;
-    margin-top: 40px;
+    margin: 40px auto 0;
     padding: 0;
 
     li {

@@ -5,9 +5,7 @@
     <div class="wrapper-buttons">
       <nuxt-link to="/create-group">Create</nuxt-link>
       <nuxt-link to="/join-group">Join</nuxt-link>
-      <nuxt-link v-if="isGroupOwner" id="my-groups" to="/my-groups"
-        >My Groups</nuxt-link
-      >
+      <nuxt-link id="my-groups" to="/my-groups">My groups</nuxt-link>
     </div>
   </div>
 </template>
@@ -16,11 +14,6 @@
 import Logo from '~/components/Logo.vue'
 
 export default {
-  data() {
-    return {
-      isGroupOwner: false
-    }
-  },
   components: {
     Logo
   }
