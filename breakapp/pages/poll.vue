@@ -45,13 +45,9 @@ export default {
       }
     }
   },
-  async mounted() {
-    await this.getGroupId()
-  },
   methods: {
     ...mapActions({
-      createPoll: 'group/createPoll',
-      getGroupId: 'getGroupId'
+      createPoll: 'group/createPoll'
     }),
     validateForm() {
       this.clearFormErrors()
@@ -64,10 +60,13 @@ export default {
     },
     submitForm() {
       this.createPoll({
-        groupId: this.$store.state.group.currentGroup?.id,
+        groupCode: this.$store.state.group.currentGroup.code,
+        userId: this.$store.state.auth.user.id,
         question: this.form.question
       }).then(() => {
-        // this.$router.push(`/groups/${this.groupId}`)
+        this.$router.push(
+          `/groups/${this.$store.state.group.currentGroup.code}`
+        )
       })
     }
   }

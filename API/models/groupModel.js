@@ -1,6 +1,6 @@
 'use strict';
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
 
 var GroupSchema = new Schema({
   groupCode: {
@@ -27,6 +27,6 @@ var GroupSchema = new Schema({
   }
 },{
   timestamps: true
-});
+})
 
-mongoose.model('Group', GroupSchema);
+mongoose.model('Group', GroupSchema)
