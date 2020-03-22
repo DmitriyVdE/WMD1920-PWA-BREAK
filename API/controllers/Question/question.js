@@ -14,7 +14,8 @@ exports.get_group_questions = async function(req, res) {
 
       let filtered = []
       questions.forEach(question => {
-        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length })
+        let voted = question.users.includes(req.params.userId)
+        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
       res.json({ groupName: group.groupName, questions: filtered })
@@ -44,7 +45,8 @@ exports.create_group_question = async function(req, res) {
 
       let filtered = []
       questions.forEach(question => {
-        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length })
+        let voted = question.users.includes(req.params.userId)
+        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
       res.json({ groupName: group.groupName, questions: filtered })
@@ -71,7 +73,8 @@ exports.update_group_question = async function(req, res) {
 
       let filtered = []
       questions.forEach(question => {
-        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length })
+        let voted = question.users.includes(req.params.userId)
+        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
       res.json({ groupName: group.groupName, questions: filtered })
@@ -105,7 +108,8 @@ exports.delete_group_question = async function(req, res) {
 
       let filtered = []
       questions.forEach(question => {
-        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length })
+        let voted = question.users.includes(req.params.userId)
+        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
       res.json({ groupName: group.groupName, questions: filtered })
@@ -132,7 +136,8 @@ exports.add_question_user = async function(req, res) {
         question.save()
       }
 
-      res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length })
+      let voted = question.users.includes(req.params.userId)
+      res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length, voted: voted })
     })
   } else {
     res.status(400).send({ error: 'Invalid request or group does not exist.'})
@@ -160,7 +165,8 @@ exports.delete_question_user = async function(req, res) {
         question.save()
       }
 
-      res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length })
+      let voted = question.users.includes(req.params.userId)
+      res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length, voted: voted })
     })
   } else {
     res.status(400).send({ error: 'Invalid request or group does not exist.'})

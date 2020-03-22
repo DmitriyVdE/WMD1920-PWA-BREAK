@@ -10,7 +10,11 @@
 
     <div class="wrapper-polls">
       <ul v-if="group.questions.length">
-        <li v-for="poll in group.questions" :key="poll.questionId">
+        <li
+          v-for="poll in group.questions"
+          :key="poll.questionId"
+          @click="togVote(poll.questionId, poll.voted)"
+        >
           <p>{{ poll.title }}</p>
           <p class="count">{{ poll.votes }}</p>
         </li>
@@ -48,8 +52,25 @@ export default {
   },
   methods: {
     ...mapActions({
-      getGroupInfo: 'group/getGroupInfo'
-    })
+      getGroupInfo: 'group/getGroupInfo',
+      addVote: 'group/addVote',
+      delVote: 'group/delVote'
+    }),
+    togVote(questionId, voted) {
+      if (voted) {
+        this.delVote({
+          groupCode: this.id,
+          userId: this.$store.state.auth.user.id,
+          questionId
+        })
+      } else {
+        this.addVote({
+          groupCode: this.id,
+          userId: this.$store.state.auth.user.id,
+          questionId
+        })
+      }
+    }
   }
 }
 </script>
