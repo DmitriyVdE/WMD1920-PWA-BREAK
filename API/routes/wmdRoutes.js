@@ -2,7 +2,7 @@
 // Filename: api-routes.js
 // Initialize express router
 var express = require('express')
-let router = express.Router();
+let router = express.Router()
 
 // Set default API response
 router
@@ -10,8 +10,8 @@ router
     res.json({
         status: 'API is Live!',
         message: 'Welcome to the \'I want a break\' API!'
-    });
-  });
+    })
+  })
 
 // mwd End Poins
 var wmdUserController = require('../controllers/user/user')
