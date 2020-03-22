@@ -10,12 +10,6 @@ export const state = () => ({
   }
 })
 
-export const getters = {
-  getGroupsFromCookie(state) {
-    return this.$cookies.get('groups')
-  }
-}
-
 export const mutations = {
   setCurrentGroup(state, data) {
     state.currentGroup = {
@@ -36,6 +30,10 @@ export const mutations = {
   },
   setNewQuestion(state, data) {
     state.currentGroup.questions.push(data)
+  },
+  setGroups(state, data) {
+    state.groups = data
+    state.currentGroup = state.groups[0]
   }
 }
 
@@ -77,5 +75,14 @@ export const actions = {
       })
 
     return request
-  }
+  },
+
+  updateGroupsFromCookie({ commit }) {
+    commit('setGroups', this.$cookies.get('groups'))
+  },
+
+  editGroup({ commit }) {},
+  clearVotes({ commit }) {},
+  kickAllMembers({ commit }) {},
+  disbandGroup({ commit }) {}
 }
