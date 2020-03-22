@@ -8,22 +8,28 @@
     <p id="code">{{ code }}</p>
 
     <div class="wrapper-controls">
-      <button id="btn-edit">Edit</button>
-      <button id="btn-clear-votes">Clear votes</button>
-      <button id="btn-kick-all">Kick all</button>
-      <button id="btn-disband">Disband</button>
+      <button id="btn-edit" @click="editGroup">Edit</button>
+      <button id="btn-clear-votes" @click="clearVotes">Clear votes</button>
+      <button id="btn-kick-all" @click="kickAll">Kick all</button>
+      <button id="btn-disband" @click="disbandGroup">Disband</button>
     </div>
+
+    <nuxt-link id="btn-back" to="/">Home</nuxt-link>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   middleware: 'isGroupOwner',
-  data() {
-    return {
-      groupName: 'SomeGroupName',
-      code: 'QWSJSN'
-    }
+  methods: {
+    ...mapActions({
+      editGroup: 'group/editGroup',
+      clearVotes: 'group/clearVotes',
+      kickAll: 'group/kickAllMembers',
+      disbandGroup: 'group/disbandGroup'
+    })
   }
 }
 </script>
@@ -66,7 +72,7 @@ export default {
   .wrapper-controls {
     display: flex;
     flex-flow: row wrap;
-    margin-top: 90px;
+    margin-top: 75px;
     max-width: 215px;
     max-height: 215px;
 
@@ -105,6 +111,10 @@ export default {
         margin: 0 0 0 15px;
       }
     }
+  }
+
+  #btn-back {
+    margin-top: 2rem;
   }
 }
 </style>

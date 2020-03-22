@@ -3,18 +3,25 @@
     <div class="wrapper-heading">
       <div class="wrapper-text">
         <h1>{{ group.name }}</h1>
-        <p>{{ group.members }} members</p>
+        <p>{{ group.userCount }} member(s)</p>
       </div>
       <i id="icon-info" class="im im-info"></i>
     </div>
 
-    <div class="wrapper-polls">
-      <ul>
-        <li v-for="poll in group.polls" :key="poll.id">
-          <p>{{ poll.question }}</p>
-          <p class="count">{{ poll.count }}</p>
+    <div v-if="group.questions" class="wrapper-polls">
+      <ul v-if="group.questions.length">
+        <li
+          v-for="poll in group.questions"
+          :key="poll.questionId"
+          @click="toggleVote(poll.questionId, poll.voted)"
+        >
+          <p>{{ poll.title }}</p>
+          <p class="count">{{ poll.votes }}</p>
         </li>
       </ul>
+      <p v-else>
+        No questions yet...
+      </p>
     </div>
 
     <div class="wrapper-controls">
@@ -24,11 +31,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  middleware: 'isGroupMember',
-  validate({ params }) {
-    return /^\d+$/.test(params.id)
-  },
   data() {
     return {
       id: this.$route.params.id
@@ -36,29 +41,36 @@ export default {
   },
   computed: {
     group() {
-      return {
-        name: 'SomeGroupName',
-        members: 25,
-        polls: [
-          {
-            id: 1,
-            question: 'Want to take a break',
-            count: 3,
-            hasParticipated: false
-          },
-          {
-            id: 2,
-            question: 'Want to take a break',
-            count: 4,
-            hasParticipated: true
-          },
-          {
-            id: 3,
-            question: 'Want to take a break',
-            count: 1,
-            hasParticipated: false
-          }
-        ]
+      return this.$store.state.group.currentGroup
+    }
+  },
+  async mounted() {
+    await this.getGroupInfo({
+      groupCode: this.id,
+      userId: this.$store.state.auth.user.id
+    })
+  },
+  methods: {
+    ...mapActions({
+      getGroupInfo: 'group/getGroupInfo',
+      addVote: 'group/addVote',
+      delVote: 'group/delVote'
+    }),
+    toggleVote(questionId, voted) {
+      // eslint-disable-next-line no-console
+      console.log(voted)
+      if (voted) {
+        this.delVote({
+          groupCode: this.id,
+          userId: this.$store.state.auth.user.id,
+          questionId
+        })
+      } else {
+        this.addVote({
+          groupCode: this.id,
+          userId: this.$store.state.auth.user.id,
+          questionId
+        })
       }
     }
   }

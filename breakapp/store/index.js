@@ -11,7 +11,7 @@ export const mutations = {
     state.auth.user.id = data
     this.$cookies.set('auth', state.auth, {
       path: '/',
-      maxAge: 60 * 60 * 24 * 7
+      maxAge: 60 * 60 * 4
     })
   }
 }
@@ -19,6 +19,7 @@ export const mutations = {
 export const actions = {
   async nuxtServerInit({ commit, dispatch }, { req }) {
     await dispatch('getUserId')
+    await dispatch('group/updateGroupsFromCookie')
   },
 
   async getUserId({ dispatch }) {

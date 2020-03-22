@@ -1,6 +1,6 @@
 'use strict';
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
 
 var QuestionSchema = new Schema({
   identifier: {
@@ -15,6 +15,6 @@ var QuestionSchema = new Schema({
   }
 },{
   timestamps: true
-});
+})
   
-mongoose.model('Question', QuestionSchema);
+mongoose.model('Question', QuestionSchema)
