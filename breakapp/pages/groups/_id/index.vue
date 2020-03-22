@@ -8,12 +8,12 @@
       <i id="icon-info" class="im im-info"></i>
     </div>
 
-    <div class="wrapper-polls">
+    <div v-if="group.questions" class="wrapper-polls">
       <ul v-if="group.questions.length">
         <li
           v-for="poll in group.questions"
           :key="poll.questionId"
-          @click="togVote(poll.questionId, poll.voted)"
+          @click="toggleVote(poll.questionId, poll.voted)"
         >
           <p>{{ poll.title }}</p>
           <p class="count">{{ poll.votes }}</p>
@@ -56,7 +56,9 @@ export default {
       addVote: 'group/addVote',
       delVote: 'group/delVote'
     }),
-    togVote(questionId, voted) {
+    toggleVote(questionId, voted) {
+      // eslint-disable-next-line no-console
+      console.log(voted)
       if (voted) {
         this.delVote({
           groupCode: this.id,

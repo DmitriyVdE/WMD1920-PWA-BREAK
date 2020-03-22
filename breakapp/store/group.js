@@ -32,6 +32,8 @@ export const mutations = {
     state.currentGroup.questions.push(data)
   },
   updateQuestion(state, data) {
+    // eslint-disable-next-line no-console
+    console.log('Updated Question')
     state.currentGroup.questions.forEach((x) => {
       if (x.questionId === data.questionId) {
         x = data
@@ -101,8 +103,10 @@ export const actions = {
   },
 
   async delVote({ commit }, voteInfo) {
+    // eslint-disable-next-line no-console
+    console.log(voteInfo)
     const request = await this.$axios
-      .$post(
+      .$delete(
         `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
         voteInfo
       )
