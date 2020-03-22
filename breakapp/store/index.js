@@ -19,6 +19,7 @@ export const mutations = {
 export const actions = {
   async nuxtServerInit({ commit, dispatch }, { req }) {
     await dispatch('getUserId')
+    await dispatch('group/updateGroupsFromCookie')
   },
 
   async getUserId({ dispatch }) {

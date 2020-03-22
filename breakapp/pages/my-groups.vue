@@ -1,6 +1,9 @@
 <template>
   <div class="wrapper-my-groups">
-    <h1>My Groups</h1>
+    <h1>
+      <nuxt-link to="/" tag="i" class="im im-arrow-left"></nuxt-link>
+      <p>My Groups</p>
+    </h1>
     <div class="wrapper-colored-bar"></div>
     <div class="wrapper-groups">
       <ul v-if="groups.length">
@@ -8,9 +11,13 @@
           <nuxt-link :to="`/groups/${group.code}`" tag="p">{{
             group.name | trimString(16)
           }}</nuxt-link>
-          <div class="btn-delete">
+          <nuxt-link
+            :to="`/groups/${group.code}/info`"
+            tag="div"
+            class="btn-delete"
+          >
             <i class="im im-x-mark icon"></i>
-          </div>
+          </nuxt-link>
         </li>
       </ul>
       <p v-else>
@@ -36,7 +43,7 @@ export default {
   },
   computed: {
     groups() {
-      return this.$cookies.get('groups')
+      return this.$store.state.group.groups
     }
   }
 }
@@ -60,13 +67,19 @@ export default {
   }
 
   h1 {
+    display: flex;
+    flex-flow: row nowrap;
     margin: 45px 0 30px 0;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 20px;
-    line-height: 23px;
     color: #3b3847;
+
+    p {
+      margin-left: 15px;
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 23px;
+    }
   }
 
   ul {
