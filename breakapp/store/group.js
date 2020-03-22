@@ -31,6 +31,13 @@ export const mutations = {
   setNewQuestion(state, data) {
     state.currentGroup.questions.push(data)
   },
+  updateQuestion(state, data) {
+    state.currentGroup.questions.forEach((x) => {
+      if (x.questionId === data.questionId) {
+        x = data
+      }
+    })
+  },
   setGroups(state, data) {
     state.groups = data
     state.currentGroup = state.groups[0]
@@ -69,6 +76,38 @@ export const actions = {
       .$post(`/api/groups/${question.groupCode}/questions`, question)
       .then((response) => {
         commit('setNewQuestion', response)
+      })
+      .catch((error) => {
+        return error
+      })
+
+    return request
+  },
+
+  async addVote({ commit }, voteInfo) {
+    const request = await this.$axios
+      .$post(
+        `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
+        voteInfo
+      )
+      .then((response) => {
+        commit('updateQuestion', response)
+      })
+      .catch((error) => {
+        return error
+      })
+
+    return request
+  },
+
+  async delVote({ commit }, voteInfo) {
+    const request = await this.$axios
+      .$post(
+        `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
+        voteInfo
+      )
+      .then((response) => {
+        commit('updateQuestion', response)
       })
       .catch((error) => {
         return error

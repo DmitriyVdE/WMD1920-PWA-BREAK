@@ -50,9 +50,11 @@ exports.get_group_info = async function(req, res) {
 
       let questions = await Question.find({ '_id': { $in: group.questions } })
 
+
       let filtered = []
       questions.forEach(question => {
-        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length })
+        let voted = question.users.includes(req.params.userId)
+        filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
       res.json({ groupCode: group.groupCode, groupName: group.groupName, isOwner: isOwner, userCount: group.users.length, questions: filtered })
