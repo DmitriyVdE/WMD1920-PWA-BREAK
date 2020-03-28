@@ -67,10 +67,14 @@ export default {
       this.getGroupInfo({
         groupCode: this.form.groupCode,
         userId: this.$store.state.auth?.user.id
-      }).then(() => {
-        this.$router.push(
-          `/groups/${this.$store.state.group.currentGroup.code}`
-        )
+      }).then((returned) => {
+        if (returned === undefined) {
+          this.$router.push(
+            `/groups/${this.$store.state.group.currentGroup.code}`
+          )
+        } else {
+          this.form.errors.push('Invalid group code.')
+        }
       })
     }
   }

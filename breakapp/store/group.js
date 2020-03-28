@@ -42,7 +42,6 @@ export const mutations = {
     state.currentGroup.questions = data.questions
   },
   updateQuestion(state, data) {
-    console.log(data)
     state.currentGroup.questions.forEach((x) => {
       if (x.questionId === data.questionId) {
         x = data
@@ -147,9 +146,12 @@ export const actions = {
   clearVotes({ commit }) {},
 
   async kickAllMembers({ commit }, group) {
-    const request = await this.$axios
-      .$delete(`/api/groups/${group.groupCode}/users`, group)
-      .then(() => {
+    const request = await this.$axios({
+      method: 'DELETE',
+      url: `/api/groups/${group.groupCode}/users`,
+      data: group
+    })
+      .then((response) => {
         commit('setCurrentGroup', { userCount: 1 })
       })
       .catch((error) => {
@@ -160,15 +162,20 @@ export const actions = {
   },
 
   async deleteGroup({ commit }, group) {
-    const request = await this.$axios
-      .$delete(`/api/groups/${group.groupCode}`, group)
-      .then(() => {
-        const currentGroups = this.state.groups
-        const indexOfgroupToBeDeleted = currentGroups.findIndex((g) => {
-          if (g.groupCode === group.groupCode) return g
-        })
-        currentGroups.splice(indexOfgroupToBeDeleted, 1)
-        commit('setGroups', currentGroups)
+    const request = await this.$axios({
+      method: 'DELETE',
+      url: `/api/groups/${group.groupCode}`,
+      data: group
+    })
+      .then((response) => {
+        if (response.status && response.status === 200) {
+          const currentGroups = this.state.groups
+          const indexOfgroupToBeDeleted = currentGroups.findIndex((g) => {
+            if (g.groupCode === group.groupCode) return g
+          })
+          currentGroups.splice(indexOfgroupToBeDeleted, 1)
+          commit('setGroups', currentGroups)
+        }
       })
       .catch((error) => {
         return error
