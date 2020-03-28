@@ -40,7 +40,7 @@ export const mutations = {
   },
   setGroups(state, data) {
     state.groups = data
-    state.currentGroup = state.groups[0]
+    if (state?.groups.length) state.currentGroup = state.groups[0]
   }
 }
 
@@ -102,7 +102,7 @@ export const actions = {
 
   async delVote({ commit }, voteInfo) {
     const request = await this.$axios
-      .$post(
+      .$delete(
         `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
         voteInfo
       )
@@ -120,8 +120,49 @@ export const actions = {
     commit('setGroups', this.$cookies.get('groups'))
   },
 
-  editGroup({ commit }) {},
+  async editGroup({ commit }, group) {
+    const request = await this.$axios
+      .$put(`/api/groups/${group.groupCode}`, group)
+      .then(() => {
+        commit('setCurrentGroup', { name: group.name })
+      })
+      .catch((error) => {
+        return error
+      })
+
+    return request
+  },
+
   clearVotes({ commit }) {},
-  kickAllMembers({ commit }) {},
-  disbandGroup({ commit }) {}
+
+  async kickAllMembers({ commit }, group) {
+    const request = await this.$axios
+      .$delete(`/api/groups/${group.groupCode}/users`, group)
+      .then(() => {
+        commit('setCurrentGroup', { userCount: 1 })
+      })
+      .catch((error) => {
+        return error
+      })
+
+    return request
+  },
+
+  async deleteGroup({ commit }, group) {
+    const request = await this.$axios
+      .$delete(`/api/groups/${group.groupCode}`, group)
+      .then(() => {
+        const currentGroups = this.state.groups
+        const indexOfgroupToBeDeleted = currentGroups.findIndex((g) => {
+          if (g.groupCode === group.groupCode) return g
+        })
+        currentGroups.splice(indexOfgroupToBeDeleted, 1)
+        commit('setGroups', currentGroups)
+      })
+      .catch((error) => {
+        return error
+      })
+
+    return request
+  }
 }

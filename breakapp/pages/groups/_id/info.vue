@@ -28,7 +28,7 @@ export default {
       editGroup: 'group/editGroup',
       clearVotes: 'group/clearVotes',
       kickAll: 'group/kickAllMembers',
-      disbandGroup: 'group/disbandGroup'
+      disbandGroup: 'group/deleteGroup'
     })
   }
 }

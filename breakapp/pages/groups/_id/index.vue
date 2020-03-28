@@ -8,7 +8,7 @@
       <i id="icon-info" class="im im-info"></i>
     </div>
 
-    <div class="wrapper-polls">
+    <div v-if="group.questions" class="wrapper-polls">
       <ul v-if="group.questions.length">
         <li
           v-for="poll in group.questions"
@@ -90,6 +90,7 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
     padding-top: 45px;
+    min-width: 80%;
 
     .wrapper-text {
       h1 {
