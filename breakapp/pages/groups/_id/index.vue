@@ -33,8 +33,8 @@
     </div>
 
     <div class="wrapper-controls">
-      <button>
-        <i @click="addQuestion()" class="im im-plus"></i>
+      <button @click="addQuestion()">
+        <i class="im im-plus"></i>
       </button>
     </div>
   </div>
@@ -143,6 +143,7 @@ export default {
     #icon-info {
       color: #6080f4;
       margin-left: 73px;
+      cursor: pointer;
     }
   }
 
@@ -198,7 +199,7 @@ export default {
     button {
       min-width: 100%;
       align-self: flex-end;
-      margin: 100px 0 22px 0;
+      margin: 70px 0 22px 0;
       font-style: normal;
       font-weight: 500;
       font-size: 36px;
@@ -208,6 +209,7 @@ export default {
       border-radius: 15px;
       border: none;
       padding: 0 118px 0 118px;
+      cursor: pointer;
     }
   }
 }
