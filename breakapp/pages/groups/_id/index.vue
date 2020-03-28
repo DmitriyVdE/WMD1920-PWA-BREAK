@@ -13,7 +13,7 @@
         </h1>
         <p>{{ group.userCount }} member(s)</p>
       </div>
-      <i id="icon-info" class="im im-info"></i>
+      <i id="icon-info" @click="goToDetails()" class="im im-info"></i>
     </div>
 
     <div v-if="group.questions" class="wrapper-polls">
@@ -83,6 +83,9 @@ export default {
     },
     addQuestion() {
       this.$router.push('/poll')
+    },
+    goToDetails() {
+      this.$router.push(`/groups/${this.id}/info`)
     }
   }
 }
