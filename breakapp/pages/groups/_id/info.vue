@@ -1,17 +1,17 @@
 <template>
   <div class="wrapper-group-info">
     <div class="wrapper-heading">
-      <p>{{ groupName }}</p>
+      <p>{{ group.name }}</p>
       <p class="subtitle">Your group code</p>
     </div>
 
-    <p id="code">{{ code }}</p>
+    <p id="code">{{ group.code }}</p>
 
     <div class="wrapper-controls">
-      <button id="btn-edit" @click="editGroup">Edit</button>
-      <button id="btn-clear-votes" @click="clearVotes">Clear votes</button>
-      <button id="btn-kick-all" @click="kickAll">Kick all</button>
-      <button id="btn-disband" @click="disbandGroup">Disband</button>
+      <button id="btn-edit" @click="editGroup()">Edit</button>
+      <button id="btn-clear-votes" @click="clearVotes()">Clear votes</button>
+      <button id="btn-kick-all" @click="kickAll()">Kick all</button>
+      <button id="btn-disband" @click="disbandGroup()">Disband</button>
     </div>
 
     <nuxt-link id="btn-back" to="/">Home</nuxt-link>
@@ -23,8 +23,25 @@ import { mapActions } from 'vuex'
 
 export default {
   middleware: 'isGroupOwner',
+  data() {
+    return {
+      id: this.$route.params.id
+    }
+  },
+  computed: {
+    group() {
+      return this.$store.state.group.currentGroup
+    }
+  },
+  async mounted() {
+    await this.getGroupInfo({
+      groupCode: this.id,
+      userId: this.$store.state.auth.user.id
+    })
+  },
   methods: {
     ...mapActions({
+      getGroupInfo: 'group/getGroupInfo',
       editGroup: 'group/editGroup',
       clearVotes: 'group/clearVotes',
       kickAll: 'group/kickAllMembers',

@@ -45,7 +45,7 @@ exports.create_group_question = async function(req, res) {
 
       let filtered = []
       questions.forEach(question => {
-        let voted = question.users.includes(req.params.userId)
+        let voted = question.users.includes(req.body.userId)
         filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
@@ -73,7 +73,7 @@ exports.update_group_question = async function(req, res) {
 
       let filtered = []
       questions.forEach(question => {
-        let voted = question.users.includes(req.params.userId)
+        let voted = question.users.includes(req.body.userId)
         filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
@@ -108,7 +108,7 @@ exports.delete_group_question = async function(req, res) {
 
       let filtered = []
       questions.forEach(question => {
-        let voted = question.users.includes(req.params.userId)
+        let voted = question.users.includes(req.body.userId)
         filtered.push({ 'questionId': question._id, 'title': question.title, 'votes': question.users.length, 'voted': voted })
       })
 
@@ -136,7 +136,7 @@ exports.add_question_user = async function(req, res) {
         question.save()
       }
 
-      let voted = question.users.includes(req.params.userId)
+      let voted = question.users.includes(req.body.userId)
       res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length, voted: voted })
     })
   } else {
@@ -165,7 +165,7 @@ exports.delete_question_user = async function(req, res) {
         question.save()
       }
 
-      let voted = question.users.includes(req.params.userId)
+      let voted = question.users.includes(req.body.userId)
       res.json({ questionId: req.params.questionId, title: question.title, votes: question.users.length, voted: voted })
     })
   } else {

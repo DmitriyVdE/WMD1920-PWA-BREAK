@@ -13,7 +13,12 @@
         </h1>
         <p>{{ group.userCount }} member(s)</p>
       </div>
-      <i id="icon-info" @click="goToDetails()" class="im im-info"></i>
+      <i
+        v-if="group.isOwner"
+        id="icon-info"
+        @click="goToDetails()"
+        class="im im-info"
+      ></i>
     </div>
 
     <div v-if="group.questions" class="wrapper-polls">
@@ -32,7 +37,7 @@
       </p>
     </div>
 
-    <div class="wrapper-controls">
+    <div v-if="group.isOwner" class="wrapper-controls">
       <button @click="addQuestion()">
         <i class="im im-plus"></i>
       </button>
