@@ -23,17 +23,12 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper-heading {
-  position: absolute;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  padding-top: 32px;
-  max-width: 267.5px;
+  margin-bottom: 5rem;
+  min-width: 100%;
 
   #logo {
     max-height: 48px;
@@ -46,6 +41,7 @@ export default {
     font-weight: bold;
     font-size: 20px;
     color: #4e4cac;
+    text-align: right;
   }
 }
 </style>

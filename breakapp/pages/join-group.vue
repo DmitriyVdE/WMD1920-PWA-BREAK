@@ -6,12 +6,11 @@
 
     <div class="wrapper-controls">
       <form @submit.prevent="validateForm" method="get">
-        <input-with-icon
-          :value="form.groupCode"
-          @input="form.groupCode = $event"
-          placeholder="Code"
-          icon-class="im im-lock"
-        ></input-with-icon>
+        <custom-input placeholder="Code"></custom-input>
+        <button-with-background
+          id="btn-join"
+          text="Join"
+        ></button-with-background>
 
         <error-list :errors="form.errors"></error-list>
 
@@ -24,7 +23,7 @@
 <script>
 import Heading from '@/components/Heading.vue'
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
-import InputWithIcon from '@/components/InputWithIcon.vue'
+import CustomInput from '@/components/CustomInput.vue'
 import ErrorList from '@/components/ErrorList.vue'
 
 import { mapActions } from 'vuex'
@@ -33,7 +32,7 @@ export default {
   components: {
     Heading,
     ButtonWithBackground,
-    InputWithIcon,
+    CustomInput,
     ErrorList
   },
   data() {
@@ -77,12 +76,27 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper-join {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  max-width: 280px;
+  margin: 0 auto;
+
+  .wrapper-header {
+    min-width: 100%;
+  }
+
   .wrapper-controls {
-    min-height: 100vh;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+
+    #btn-join {
+      margin-top: 5rem;
+    }
   }
 }
 </style>

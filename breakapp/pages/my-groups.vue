@@ -1,7 +1,12 @@
 <template>
   <div class="wrapper-my-groups">
     <h1>
-      <nuxt-link to="/" tag="i" class="im im-arrow-left"></nuxt-link>
+      <nuxt-link
+        id="btn-back"
+        to="/"
+        tag="i"
+        class="im im-arrow-left"
+      ></nuxt-link>
       <p>My Groups</p>
     </h1>
     <div class="wrapper-colored-bar"></div>
@@ -54,7 +59,9 @@ export default {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  max-width: 285px;
+  align-items: center;
+  min-height: 100vh;
+  max-width: 280px;
   margin: 0 auto;
 
   .wrapper-colored-bar {
@@ -69,8 +76,18 @@ export default {
   h1 {
     display: flex;
     flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
     margin: 45px 0 30px 0;
     color: #3b3847;
+    min-width: 100%;
+
+    #btn-back {
+      &:hover,
+      :active {
+        cursor: pointer;
+      }
+    }
 
     p {
       margin-left: 15px;
@@ -82,53 +99,85 @@ export default {
     }
   }
 
-  ul {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    min-width: 85%;
-    margin: 40px auto 0;
-    padding: 0;
-
-    li {
+  .wrapper-groups {
+    min-width: 100%;
+    ul {
       display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
+      flex-flow: column nowrap;
+      justify-content: center;
+      min-width: 100%;
+      margin: 40px auto 0;
+      min-width: 100%;
+      padding: 0;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      max-height: 600px;
 
-      &:last-of-type {
-        margin-bottom: 0;
+      &::-webkit-scrollbar {
+        height: 0;
+        width: 0;
       }
 
-      p {
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 21px;
-        color: #3b3847;
-        overflow: hidden;
-        max-width: 60%;
+      &::-webkit-scrollbar-thumb {
+        height: 0;
+        width: 0;
       }
 
-      .btn-delete {
-        background: #f6f5f8;
-        border-radius: 14px;
+      &::-webkit-scrollbar-track {
+        height: 0;
+        width: 0;
+      }
 
-        .icon {
-          color: #ff919b;
-          padding: 13px;
+      li {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        min-width: 100%;
+        margin-bottom: 25px;
+
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+
+        p {
+          font-family: Roboto;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 18px;
+          line-height: 21px;
+          color: #3b3847;
+          overflow: hidden;
+          max-width: 60%;
+
+          &:hover,
+          :active {
+            cursor: pointer;
+            text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.1);
+          }
+        }
+
+        .btn-delete {
+          background: #f6f5f8;
+          border-radius: 14px;
+
+          &:hover,
+          :active {
+            cursor: pointer;
+            transform: scale(1.1);
+          }
+
+          .icon {
+            color: #ff919b;
+            padding: 13px;
+          }
         }
       }
     }
   }
 
   #btn-new-group {
-    position: absolute;
-    bottom: 36px;
-    left: 0;
-    right: 0;
+    margin-top: 5rem;
   }
 }
 </style>

@@ -6,12 +6,12 @@
 
     <div class="wrapper-controls">
       <form @submit.prevent="validateForm" method="post">
-        <input-with-icon
+        <custom-input
           :value="form.question"
           @input="form.question = $event"
           placeholder="Poll"
           icon-class="im im-question"
-        ></input-with-icon>
+        ></custom-input>
 
         <error-list :errors="form.errors"></error-list>
 
@@ -24,7 +24,7 @@
 <script>
 import Heading from '@/components/Heading.vue'
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
-import InputWithIcon from '@/components/InputWithIcon.vue'
+import CustomInput from '@/components/CustomInput.vue'
 import ErrorList from '@/components/ErrorList.vue'
 
 import { mapActions } from 'vuex'
@@ -34,7 +34,7 @@ export default {
   components: {
     Heading,
     ButtonWithBackground,
-    InputWithIcon,
+    CustomInput,
     ErrorList
   },
   data() {
