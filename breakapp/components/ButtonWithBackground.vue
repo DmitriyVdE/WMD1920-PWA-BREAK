@@ -19,21 +19,12 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper-button {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
   #button-background {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     margin: 0 auto;
     width: 288px;
     height: 124px;
     background-color: #f6f4fc;
-    border-radius: 17px 17px 0px 0px;
+    border-radius: 17px;
 
     button {
       position: relative;
@@ -50,6 +41,11 @@ export default {
       padding: 12px 88px;
       border: none;
       max-width: 234px;
+
+      &:hover,
+      :active {
+        cursor: pointer;
+      }
     }
   }
 }

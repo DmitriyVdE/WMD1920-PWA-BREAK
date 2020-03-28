@@ -2,7 +2,15 @@
   <div class="wrapper-group">
     <div class="wrapper-heading">
       <div class="wrapper-text">
-        <h1>{{ group.name }}</h1>
+        <h1>
+          <nuxt-link
+            id="btn-back"
+            to="/"
+            tag="i"
+            class="im im-arrow-left"
+          ></nuxt-link
+          >{{ group.name }}
+        </h1>
         <p>{{ group.userCount }} member(s)</p>
       </div>
       <i id="icon-info" class="im im-info"></i>
@@ -19,7 +27,7 @@
           <p class="count">{{ poll.votes }}</p>
         </li>
       </ul>
-      <p v-else>
+      <p id="txt-no-questions" v-else>
         No questions yet...
       </p>
     </div>
@@ -83,6 +91,8 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  max-width: 280px;
+  margin: 0 auto;
 
   .wrapper-heading {
     display: flex;
@@ -90,7 +100,7 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
     padding-top: 45px;
-    min-width: 80%;
+    min-width: 100%;
 
     .wrapper-text {
       h1 {
@@ -98,6 +108,20 @@ export default {
         font-size: 20px;
         line-height: 23px;
         color: #3b3847;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+
+        #btn-back {
+          font-size: 15px;
+          margin-right: 1rem;
+
+          &:hover,
+          :active {
+            cursor: pointer;
+          }
+        }
       }
 
       p {
@@ -115,6 +139,12 @@ export default {
   }
 
   .wrapper-polls {
+    min-width: 100%;
+
+    #txt-no-questions {
+      text-align: center;
+    }
+
     ul {
       padding: 0;
       margin: 0;
@@ -155,7 +185,10 @@ export default {
   }
 
   .wrapper-controls {
+    min-width: 100%;
+
     button {
+      min-width: 100%;
       align-self: flex-end;
       margin: 100px 0 22px 0;
       font-style: normal;
