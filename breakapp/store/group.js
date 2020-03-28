@@ -21,8 +21,14 @@ export const mutations = {
       isOwner: data?.isOwner
     }
 
+    // Group already has elements
     if (state.groups?.length) {
-      state.groups = [...state.groups, state.currentGroup]
+      const groupsAlreadyContainsCurrentGroup = state.groups.some(
+        (g) => g.code === state.currentGroup.code
+      )
+
+      if (!groupsAlreadyContainsCurrentGroup)
+        state.groups = [...state.groups, state.currentGroup]
     } else {
       state.groups = [state.currentGroup]
     }
