@@ -42,12 +42,11 @@ export const mutations = {
     state.currentGroup.questions = data.questions
   },
   updateQuestion(state, data) {
-    console.log(data)
-    state.currentGroup.questions.forEach((x) => {
-      if (x.questionId === data.questionId) {
-        x = data
-      }
-    })
+    const questionIndex = state.currentGroup.questions
+      .map((q) => q?.questionId)
+      .indexOf(data?.questionId)
+
+    Object.assign(state.currentGroup.questions[questionIndex], data)
   },
   setGroups(state, data) {
     state.groups = data
@@ -96,13 +95,13 @@ export const actions = {
   },
 
   async addVote({ commit }, voteInfo) {
-    const request = await this.$axios
-      .$post(
-        `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
-        voteInfo
-      )
+    const request = await this.$axios({
+      method: 'POST',
+      url: `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
+      data: voteInfo
+    })
       .then((response) => {
-        commit('updateQuestion', response)
+        commit('updateQuestion', response?.data)
       })
       .catch((error) => {
         return error
@@ -111,7 +110,7 @@ export const actions = {
     return request
   },
 
-  async delVote({ commit }, voteInfo) {
+  async removeVote({ commit }, voteInfo) {
     const request = await this.$axios({
       method: 'DELETE',
       url: `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,

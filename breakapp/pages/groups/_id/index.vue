@@ -23,10 +23,10 @@
 
     <div v-if="group.questions" class="wrapper-polls">
       <ul v-if="group.questions.length">
-        <li v-for="poll in group.questions" :key="poll.questionId">
-          <p>{{ poll.title }}</p>
-          <p class="count" @click="toggleVote(poll.questionId, poll.voted)">
-            {{ poll.votes }}
+        <li v-for="question in group.questions" :key="question.questionId">
+          <p>{{ question.title }}</p>
+          <p class="count" @click="toggleVote(question)">
+            {{ question.votes }}
           </p>
         </li>
       </ul>
@@ -67,22 +67,19 @@ export default {
     ...mapActions({
       getGroupInfo: 'group/getGroupInfo',
       addVote: 'group/addVote',
-      delVote: 'group/delVote'
+      removeVote: 'group/removeVote'
     }),
-    toggleVote(questionId, voted) {
-      if (voted) {
-        this.delVote({
-          groupCode: this.id,
-          userId: this.$store.state.auth.user.id,
-          questionId
-        })
-      } else {
-        this.addVote({
-          groupCode: this.id,
-          userId: this.$store.state.auth.user.id,
-          questionId
-        })
+    toggleVote(poll) {
+      const { questionId, voted } = poll
+
+      const vote = {
+        groupCode: this.id,
+        userId: this.$store.state.auth.user.id,
+        questionId
       }
+
+      if (!voted) this.addVote(vote)
+      else this.removeVote(vote)
     },
     addQuestion() {
       this.$router.push('/poll')
