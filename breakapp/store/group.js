@@ -29,7 +29,7 @@ export const mutations = {
     })
   },
   setNewQuestion(state, data) {
-    state.currentGroup.questions.push(data)
+    state.currentGroup.questions = data.questions
   },
   updateQuestion(state, data) {
     state.currentGroup.questions.forEach((x) => {
@@ -101,11 +101,11 @@ export const actions = {
   },
 
   async delVote({ commit }, voteInfo) {
-    const request = await this.$axios
-      .$delete(
-        `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
-        voteInfo
-      )
+    const request = await this.$axios({
+      method: 'DELETE',
+      url: `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
+      data: voteInfo
+    })
       .then((response) => {
         commit('updateQuestion', response)
       })

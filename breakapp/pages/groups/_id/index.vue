@@ -1,5 +1,9 @@
 <template>
   <div class="wrapper-group">
+    <div class="wrapper-header">
+      <heading title="Group Home"></heading>
+    </div>
+
     <div class="wrapper-heading">
       <div class="wrapper-text">
         <h1>
@@ -21,7 +25,7 @@
         <li
           v-for="poll in group.questions"
           :key="poll.questionId"
-          @click="togVote(poll.questionId, poll.voted)"
+          @click="toggleVote(poll.questionId, poll.voted)"
         >
           <p>{{ poll.title }}</p>
           <p class="count">{{ poll.votes }}</p>
@@ -33,15 +37,22 @@
     </div>
 
     <div class="wrapper-controls">
-      <button><i class="im im-plus"></i></button>
+      <button>
+        <i @click="addQuestion()" class="im im-plus"></i>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import Heading from '@/components/Heading.vue'
+
 import { mapActions } from 'vuex'
 
 export default {
+  components: {
+    Heading
+  },
   data() {
     return {
       id: this.$route.params.id
@@ -64,7 +75,7 @@ export default {
       addVote: 'group/addVote',
       delVote: 'group/delVote'
     }),
-    togVote(questionId, voted) {
+    toggleVote(questionId, voted) {
       if (voted) {
         this.delVote({
           groupCode: this.id,
@@ -78,6 +89,9 @@ export default {
           questionId
         })
       }
+    },
+    addQuestion() {
+      this.$router.push('/poll')
     }
   }
 }

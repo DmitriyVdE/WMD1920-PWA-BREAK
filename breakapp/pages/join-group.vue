@@ -5,11 +5,17 @@
     </div>
 
     <div class="wrapper-controls">
-      <custom-input placeholder="Code"></custom-input>
-      <button-with-background
-        id="btn-join"
-        text="Join"
-      ></button-with-background>
+      <form @submit.prevent="validateForm" method="get">
+        <custom-input placeholder="Code"></custom-input>
+        <button-with-background
+          id="btn-join"
+          text="Join"
+        ></button-with-background>
+
+        <error-list :errors="form.errors"></error-list>
+
+        <button-with-background text="Join"></button-with-background>
+      </form>
     </div>
   </div>
 </template>
@@ -18,12 +24,52 @@
 import Heading from '@/components/Heading.vue'
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
 import CustomInput from '@/components/CustomInput.vue'
+import ErrorList from '@/components/ErrorList.vue'
+
+import { mapActions } from 'vuex'
 
 export default {
   components: {
     Heading,
     ButtonWithBackground,
-    CustomInput
+    CustomInput,
+    ErrorList
+  },
+  data() {
+    return {
+      form: {
+        groupCode: '',
+        errors: []
+      }
+    }
+  },
+  async mounted() {
+    await this.getUserId()
+  },
+  methods: {
+    ...mapActions({
+      getGroupInfo: 'group/getGroupInfo',
+      getUserId: 'getUserId'
+    }),
+    validateForm() {
+      this.clearFormErrors()
+      if (!this.form.groupCode) {
+        this.form.errors.push('Group code is required')
+      } else this.submitForm()
+    },
+    clearFormErrors() {
+      this.form.errors = []
+    },
+    submitForm() {
+      this.getGroupInfo({
+        groupCode: this.form.groupCode,
+        userId: this.$store.state.auth?.user.id
+      }).then(() => {
+        this.$router.push(
+          `/groups/${this.$store.state.group.currentGroup.code}`
+        )
+      })
+    }
   }
 }
 </script>
