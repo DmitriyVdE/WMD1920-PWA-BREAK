@@ -15,7 +15,10 @@
 
         <error-list :errors="form.errors"></error-list>
 
-        <button-with-background text="Create"></button-with-background>
+        <button-with-background
+          id="btn-create"
+          text="Create"
+        ></button-with-background>
       </form>
     </div>
   </div>
@@ -75,12 +78,27 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper-poll {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  max-width: 280px;
+  margin: 0 auto;
+
+  .wrapper-header {
+    min-width: 100%;
+  }
+
   .wrapper-controls {
-    min-height: 100vh;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+
+    #btn-create {
+      margin-top: 5rem;
+    }
   }
 }
 </style>

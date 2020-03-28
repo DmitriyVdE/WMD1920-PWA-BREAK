@@ -23,13 +23,11 @@
 
     <div v-if="group.questions" class="wrapper-polls">
       <ul v-if="group.questions.length">
-        <li
-          v-for="poll in group.questions"
-          :key="poll.questionId"
-          @click="toggleVote(poll.questionId, poll.voted)"
-        >
+        <li v-for="poll in group.questions" :key="poll.questionId">
           <p>{{ poll.title }}</p>
-          <p class="count">{{ poll.votes }}</p>
+          <p class="count" @click="toggleVote(poll.questionId, poll.voted)">
+            {{ poll.votes }}
+          </p>
         </li>
       </ul>
       <p id="txt-no-questions" v-else>
@@ -163,11 +161,26 @@ export default {
       padding: 0;
       margin: 0;
       list-style: none;
-      overflow: scroll;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      max-height: 600px;
+
+      &::-webkit-scrollbar {
+        height: 0;
+        width: 0;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        height: 0;
+        width: 0;
+      }
+
+      &::-webkit-scrollbar-track {
+        height: 0;
+        width: 0;
+      }
 
       li {
-        max-width: 257px;
-        min-width: 257px;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
@@ -192,6 +205,12 @@ export default {
             background-color: #f6f5f8;
             border-radius: 14px;
             margin-bottom: 30px;
+
+            &:hover,
+            :active {
+              cursor: pointer;
+              transform: scale(1.01);
+            }
           }
         }
       }
@@ -204,7 +223,7 @@ export default {
     button {
       min-width: 100%;
       align-self: flex-end;
-      margin: 70px 0 22px 0;
+      margin: 50px 0 22px 0;
       font-style: normal;
       font-weight: 500;
       font-size: 36px;

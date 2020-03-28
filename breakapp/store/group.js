@@ -42,6 +42,7 @@ export const mutations = {
     state.currentGroup.questions = data.questions
   },
   updateQuestion(state, data) {
+    console.log(data)
     state.currentGroup.questions.forEach((x) => {
       if (x.questionId === data.questionId) {
         x = data
@@ -117,7 +118,7 @@ export const actions = {
       data: voteInfo
     })
       .then((response) => {
-        commit('updateQuestion', response)
+        commit('updateQuestion', response?.data)
       })
       .catch((error) => {
         return error
