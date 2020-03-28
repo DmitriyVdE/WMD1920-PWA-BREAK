@@ -6,25 +6,26 @@
 
     <div class="wrapper-controls">
       <form @submit.prevent="validateForm" method="post">
-        <input-with-icon
+        <custom-input
           :value="form.groupName"
           @input="form.groupName = $event"
-          icon-class="im im-users"
           placeholder="Name"
-        ></input-with-icon>
+        ></custom-input>
 
-        <input-with-icon
+        <custom-input
           id="input-password"
           :value="form.password"
           @input="form.password = $event"
           type="password"
-          icon-class="im im-lock"
           placeholder="Password"
-        ></input-with-icon>
+        ></custom-input>
 
         <error-list :errors="form.errors"></error-list>
 
-        <button-with-background text="Create"></button-with-background>
+        <button-with-background
+          id="btn-create"
+          text="Create"
+        ></button-with-background>
       </form>
     </div>
   </div>
@@ -33,7 +34,7 @@
 <script>
 import Heading from '@/components/Heading.vue'
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
-import InputWithIcon from '@/components/InputWithIcon.vue'
+import CustomInput from '@/components/CustomInput.vue'
 import ErrorList from '@/components/ErrorList.vue'
 
 import { mapActions } from 'vuex'
@@ -42,7 +43,7 @@ export default {
   components: {
     Heading,
     ButtonWithBackground,
-    InputWithIcon,
+    CustomInput,
     ErrorList
   },
   data() {
@@ -88,16 +89,32 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper-create {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  max-width: 280px;
+  margin: 0 auto;
+
+  .wrapper-header {
+    min-width: 100%;
+  }
+
   .wrapper-controls {
-    min-height: 100vh;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+
     form {
       #input-password {
         margin-top: 0.7rem;
       }
+    }
+
+    #btn-create {
+      margin-top: 5rem;
     }
   }
 }

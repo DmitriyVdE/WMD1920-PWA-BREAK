@@ -29,7 +29,12 @@ export default {
     border-radius: 10px;
     padding: 12px 88px;
     border: none;
-    max-width: 88%;
+
+    &:hover,
+    :active {
+      cursor: pointer;
+      transform: scale(1.02);
+    }
   }
 }
 </style>

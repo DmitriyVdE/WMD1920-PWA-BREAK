@@ -24,6 +24,7 @@ export default {
   ul {
     list-style: none;
     padding: 0;
+    margin-top: 10px;
 
     li {
       color: #ff808b;
