@@ -29,11 +29,9 @@ export const mutations = {
     })
   },
   setNewQuestion(state, data) {
-    state.currentGroup.questions.push(data)
+    state.currentGroup.questions = data.questions
   },
   updateQuestion(state, data) {
-    // eslint-disable-next-line no-console
-    console.log('Updated Question')
     state.currentGroup.questions.forEach((x) => {
       if (x.questionId === data.questionId) {
         x = data
@@ -103,13 +101,11 @@ export const actions = {
   },
 
   async delVote({ commit }, voteInfo) {
-    // eslint-disable-next-line no-console
-    console.log(voteInfo)
-    const request = await this.$axios
-      .$delete(
-        `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
-        voteInfo
-      )
+    const request = await this.$axios({
+      method: 'DELETE',
+      url: `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
+      data: voteInfo
+    })
       .then((response) => {
         commit('updateQuestion', response)
       })
