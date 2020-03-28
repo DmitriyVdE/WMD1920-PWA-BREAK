@@ -1,9 +1,5 @@
 <template>
   <div class="wrapper-group">
-    <div class="wrapper-header">
-      <heading title="Group Home"></heading>
-    </div>
-
     <div class="wrapper-heading">
       <div class="wrapper-text">
         <h1>
@@ -45,14 +41,9 @@
 </template>
 
 <script>
-import Heading from '@/components/Heading.vue'
-
 import { mapActions } from 'vuex'
 
 export default {
-  components: {
-    Heading
-  },
   data() {
     return {
       id: this.$route.params.id
