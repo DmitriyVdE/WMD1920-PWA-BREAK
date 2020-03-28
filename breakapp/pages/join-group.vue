@@ -6,15 +6,18 @@
 
     <div class="wrapper-controls">
       <form @submit.prevent="validateForm" method="get">
-        <custom-input placeholder="Code"></custom-input>
+        <custom-input
+          :value="form.groupCode"
+          @input="form.groupCode = $event"
+          placeholder="Code"
+        ></custom-input>
+
+        <error-list :errors="form.errors"></error-list>
+
         <button-with-background
           id="btn-join"
           text="Join"
         ></button-with-background>
-
-        <error-list :errors="form.errors"></error-list>
-
-        <button-with-background text="Join"></button-with-background>
       </form>
     </div>
   </div>
