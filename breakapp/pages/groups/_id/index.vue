@@ -68,8 +68,6 @@ export default {
       delVote: 'group/delVote'
     }),
     toggleVote(questionId, voted) {
-      // eslint-disable-next-line no-console
-      console.log(voted)
       if (voted) {
         this.delVote({
           groupCode: this.id,
