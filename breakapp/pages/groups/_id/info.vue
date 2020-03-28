@@ -5,13 +5,19 @@
       <p class="subtitle">Your group code</p>
     </div>
 
+    <nuxt-link
+      id="btn-back"
+      :to="`/groups/${group.code}`"
+      tag="i"
+      class="im im-arrow-left"
+    ></nuxt-link>
     <p id="code">{{ group.code }}</p>
 
     <div class="wrapper-controls">
-      <button id="btn-edit" @click="editGroup()">Edit</button>
+      <button id="btn-edit" @click="goToEditGroup()">Edit</button>
       <button id="btn-clear-votes" @click="clearVotes()">Clear votes</button>
-      <button id="btn-kick-all" @click="kickAll()">Kick all</button>
-      <button id="btn-disband" @click="disbandGroup()">Disband</button>
+      <button id="btn-kick-all" @click="goToKickAll()">Kick all</button>
+      <button id="btn-disband" @click="goToDisband()">Disband</button>
     </div>
 
     <nuxt-link id="btn-back" to="/">Home</nuxt-link>
@@ -42,11 +48,17 @@ export default {
   methods: {
     ...mapActions({
       getGroupInfo: 'group/getGroupInfo',
-      editGroup: 'group/editGroup',
-      clearVotes: 'group/clearVotes',
-      kickAll: 'group/kickAllMembers',
-      disbandGroup: 'group/deleteGroup'
-    })
+      clearVotes: 'group/clearVotes'
+    }),
+    goToEditGroup() {
+      this.$router.push(`/groups/${this.id}/edit`)
+    },
+    goToKickAll() {
+      this.$router.push(`/groups/${this.id}/kickall`)
+    },
+    goToDisband() {
+      this.$router.push(`/groups/${this.id}/disband`)
+    }
   }
 }
 </script>
