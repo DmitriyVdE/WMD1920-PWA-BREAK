@@ -29,15 +29,22 @@
     </div>
 
     <div class="wrapper-controls">
-      <button><i class="im im-plus"></i></button>
+      <button>
+        <i @click="addQuestion()" class="im im-plus"></i>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import Heading from '@/components/Heading.vue'
+
 import { mapActions } from 'vuex'
 
 export default {
+  components: {
+    Heading
+  },
   data() {
     return {
       id: this.$route.params.id
@@ -76,6 +83,9 @@ export default {
           questionId
         })
       }
+    },
+    addQuestion() {
+      this.$router.push('/poll')
     }
   }
 }
