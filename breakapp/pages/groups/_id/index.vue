@@ -92,6 +92,7 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
     padding-top: 45px;
+    min-width: 80%;
 
     .wrapper-text {
       h1 {
