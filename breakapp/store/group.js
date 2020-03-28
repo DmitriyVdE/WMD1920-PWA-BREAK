@@ -21,7 +21,7 @@ export const mutations = {
       isOwner: data?.isOwner
     }
 
-    state.groups.push(state.currentGroup)
+    state.groups = [...state.groups, state.currentGroup]
 
     this.$cookies.set('groups', state.groups, {
       path: '/',
@@ -40,7 +40,7 @@ export const mutations = {
   },
   setGroups(state, data) {
     state.groups = data
-    if (state?.groups.length) state.currentGroup = state.groups[0]
+    if (state?.groups?.length) state.currentGroup = state.groups[0]
   }
 }
 
