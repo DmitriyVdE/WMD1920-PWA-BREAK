@@ -14,8 +14,8 @@
         <p>{{ group.userCount }} member(s)</p>
       </div>
       <i
-        v-if="group.isOwner"
         id="icon-info"
+        v-if="group.isOwner"
         @click="goToDetails()"
         class="im im-info"
       ></i>
@@ -25,7 +25,7 @@
       <ul v-if="group.questions.length">
         <li v-for="question in group.questions" :key="question.questionId">
           <p>{{ question.title }}</p>
-          <p class="count" @click="toggleVote(question)">
+          <p @click="toggleVote(question)" class="count">
             {{ question.votes }}
           </p>
         </li>

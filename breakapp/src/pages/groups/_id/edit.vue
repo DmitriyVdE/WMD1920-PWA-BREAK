@@ -7,24 +7,22 @@
         tag="i"
         class="im im-arrow-left"
       ></nuxt-link>
-      <p class="subtitle">Kick all users?</p>
+      <p class="subtitle">Edit your group name</p>
     </div>
 
     <div class="wrapper-controls">
-      <form @submit.prevent="validateForm" method="delete">
+      <form @submit.prevent="validateForm" method="put">
         <custom-input
-          id="input-password"
-          :value="password"
-          @input="password = $event"
-          type="password"
-          placeholder="Password"
+          :value="groupName"
+          @input="groupName = $event"
+          placeholder="Name"
         ></custom-input>
 
-        <error-list :errors="this.errors"></error-list>
+        <!--<error-list :errors="this.errors"></error-list>-->
 
         <button-with-background
           id="btn-create"
-          text="Kick"
+          text="Save"
         ></button-with-background>
       </form>
     </div>
@@ -34,22 +32,22 @@
 <script>
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
 import CustomInput from '@/components/CustomInput.vue'
-import ErrorList from '@/components/ErrorList.vue'
+// import ErrorList from '@/components/ErrorList.vue'
 
 import { mapActions } from 'vuex'
 
 export default {
   components: {
     ButtonWithBackground,
-    CustomInput,
-    ErrorList
+    CustomInput // ,
+    // ErrorList
   },
   middleware: 'isGroupOwner',
   data() {
     return {
       id: this.$route.params.id,
       userId: '',
-      password: '',
+      groupName: '',
       errors: []
     }
   },
@@ -60,6 +58,7 @@ export default {
   },
   async mounted() {
     this.userId = this.$store.state.auth.user.id
+    this.groupName = this.$store.state.group.currentGroup.name
     await this.getGroupInfo({
       groupCode: this.id,
       userId: this.userId
@@ -68,28 +67,24 @@ export default {
   methods: {
     ...mapActions({
       getGroupInfo: 'group/getGroupInfo',
-      commitKick: 'group/kickAllMembers'
+      commitEdit: 'group/editGroup'
     }),
     validateForm() {
       this.clearFormErrors()
-      if (!this.password) {
-        this.errors.push('Group password is required')
+      if (!this.groupName) {
+        this.errors.push('Group name is required')
       } else this.submitForm()
     },
     clearFormErrors() {
       this.errors = []
     },
     submitForm() {
-      this.commitKick({
+      this.commitEdit({
         userId: this.userId,
         groupCode: this.id,
-        password: this.password
-      }).then((returned) => {
-        if (returned === undefined) {
-          this.$router.push(`/groups/${this.id}`)
-        } else {
-          this.errors.push('Invalid password.')
-        }
+        groupName: this.groupName
+      }).then(() => {
+        this.$router.push(`/groups/${this.id}`)
       })
     }
   }

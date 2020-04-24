@@ -1,5 +1,8 @@
-export default {
+/* eslint-disable */
+module.exports = {
   mode: 'universal',
+  srcDir: 'src',
+  buildDir: 'functions/.nuxt',
   /*
    ** Headers of the page
    */
@@ -65,14 +68,6 @@ export default {
     // Doc:
     'cookie-universal-nuxt'
   ],
-  axios: {
-    proxy: true
-  },
-  proxy: {
-    '/api/': {
-      target: 'https://wmd-1920-pwa-break.appspot.com'
-    }
-  },
   /*
    ** Build configuration
    */
@@ -80,6 +75,7 @@ export default {
     /*
      ** You can extend webpack config here
      */
+    extractCSS: true,
     extend(config, ctx) {}
   }
 }

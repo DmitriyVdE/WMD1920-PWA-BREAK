@@ -5,12 +5,22 @@
   "author": "Raf Vanpuyvelde, Dmitriy Van Der Elst",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "cross-env NODE_ENV=development nodemon src/server/index.js --watch server",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "cross-env NODE_ENV=production node src/server/index.js",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore ."
+    "precommit": "npm run lint",
+    "build:firebase": "yarn clean && yarn build && yarn copy && cd \"functions\" && yarn",
+    "clean": "yarn clean:public && yarn clean:functions && yarn clean:static",
+    "clean:functions": "rimraf \"functions/node_modules\" && rimraf \"functions/.nuxt\"",
+    "clean:public": "rimraf \"public/**/*.*!(md)\" && rimraf \"public/_nuxt\"",
+    "clean:static": "rimraf \"src/static/sw.js\"",
+    "copy": "yarn copy:nuxt && yarn copy:static",
+    "copy:nuxt": "xcopy \"functions\\.nuxt\\dist\\*\" \"public\\_nuxt\\\" /E /Y",
+    "copy:static": "xcopy \"src\\static\\*\" \"public\\\" /E /Y",
+    "start:firebase": "firebase serve --only functions,hosting",
+    "deploy": "firebase deploy --only functions,hosting"
   },
   "lint-staged": {
     "*.{js,vue}": "eslint"
@@ -23,8 +33,12 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
+    "consola": "^2.11.3",
+    "cookie-universal": "^2.1.3",
     "cookie-universal-nuxt": "^2.1.3",
     "cookieparser": "^0.1.0",
+    "cross-env": "^7.0.2",
+    "express": "^4.17.1",
     "node-sass": "^4.13.1",
     "nuxt": "^2.0.0",
     "sass-loader": "^8.0.2"
