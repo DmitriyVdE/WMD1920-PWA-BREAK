@@ -3,13 +3,10 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const express = require("express")
 const app = express()
-//const http = require('http').Server(app)
-//const io = require('socket.io')(http)
 
 // socket.io stuff
-//io.on('connection', () => {
-//  console.log('a user is connected')
-// })
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
 // middlewares
 app.use(cors())
@@ -39,12 +36,19 @@ let apiRoutes = require("./routes/wmdRoutes")
 // Use Api routes in the App
 app.use("/api", apiRoutes)
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
 const PORT = process.env.PORT || 3000
-const server = app.listen(PORT, () => {
+const server = http.listen(PORT, () => {
     const host = server.address().address
     const port = server.address().port
   
     console.log(`PWA Break API listening at http://${host}:${port}`)
   })
 
-module.exports = app
+module.exports = http
