@@ -2,32 +2,51 @@
   <div class="wrapper-group">
     <div class="wrapper-heading">
       <div class="wrapper-text">
-        <h1>{{ group.name }}</h1>
-        <p>{{ group.members }} members</p>
+        <h1>
+          <nuxt-link
+            id="btn-back"
+            to="/"
+            tag="i"
+            class="im im-arrow-left"
+          ></nuxt-link
+          >{{ group.name }}
+        </h1>
+        <p>{{ group.userCount }} member(s)</p>
       </div>
-      <i id="icon-info" class="im im-info"></i>
+      <i
+        v-if="group.isOwner"
+        id="icon-info"
+        @click="goToDetails()"
+        class="im im-info"
+      ></i>
     </div>
 
-    <div class="wrapper-polls">
-      <ul>
-        <li v-for="poll in group.polls" :key="poll.id">
-          <p>{{ poll.question }}</p>
-          <p class="count">{{ poll.count }}</p>
+    <div v-if="group.questions" class="wrapper-polls">
+      <ul v-if="group.questions.length">
+        <li v-for="question in group.questions" :key="question.questionId">
+          <p>{{ question.title }}</p>
+          <p class="count" @click="toggleVote(question)">
+            {{ question.votes }}
+          </p>
         </li>
       </ul>
+      <p id="txt-no-questions" v-else>
+        No questions yet...
+      </p>
     </div>
 
-    <div class="wrapper-controls">
-      <button><i class="im im-plus"></i></button>
+    <div v-if="group.isOwner" class="wrapper-controls">
+      <button @click="addQuestion()">
+        <i class="im im-plus"></i>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  validate({ params }) {
-    return /^\d+$/.test(params.id)
-  },
   data() {
     return {
       id: this.$route.params.id
@@ -35,30 +54,38 @@ export default {
   },
   computed: {
     group() {
-      return {
-        name: 'SomeGroupName',
-        members: 25,
-        polls: [
-          {
-            id: 1,
-            question: 'Want to take a break',
-            count: 3,
-            hasParticipated: false
-          },
-          {
-            id: 2,
-            question: 'Want to take a break',
-            count: 4,
-            hasParticipated: true
-          },
-          {
-            id: 3,
-            question: 'Want to take a break',
-            count: 1,
-            hasParticipated: false
-          }
-        ]
+      return this.$store.state.group.currentGroup
+    }
+  },
+  async mounted() {
+    await this.getGroupInfo({
+      groupCode: this.id,
+      userId: this.$store.state.auth.user.id
+    })
+  },
+  methods: {
+    ...mapActions({
+      getGroupInfo: 'group/getGroupInfo',
+      addVote: 'group/addVote',
+      removeVote: 'group/removeVote'
+    }),
+    toggleVote(poll) {
+      const { questionId, voted } = poll
+
+      const vote = {
+        groupCode: this.id,
+        userId: this.$store.state.auth.user.id,
+        questionId
       }
+
+      if (!voted) this.addVote(vote)
+      else this.removeVote(vote)
+    },
+    addQuestion() {
+      this.$router.push('/poll')
+    },
+    goToDetails() {
+      this.$router.push(`/groups/${this.id}/info`)
     }
   }
 }
@@ -72,6 +99,8 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  max-width: 280px;
+  margin: 0 auto;
 
   .wrapper-heading {
     display: flex;
@@ -79,6 +108,7 @@ export default {
     justify-content: space-between;
     align-items: flex-start;
     padding-top: 45px;
+    min-width: 100%;
 
     .wrapper-text {
       h1 {
@@ -86,6 +116,20 @@ export default {
         font-size: 20px;
         line-height: 23px;
         color: #3b3847;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+
+        #btn-back {
+          font-size: 15px;
+          margin-right: 1rem;
+
+          &:hover,
+          :active {
+            cursor: pointer;
+          }
+        }
       }
 
       p {
@@ -99,19 +143,41 @@ export default {
     #icon-info {
       color: #6080f4;
       margin-left: 73px;
+      cursor: pointer;
     }
   }
 
   .wrapper-polls {
+    min-width: 100%;
+
+    #txt-no-questions {
+      text-align: center;
+    }
+
     ul {
       padding: 0;
       margin: 0;
       list-style: none;
-      overflow: scroll;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      max-height: 600px;
+
+      &::-webkit-scrollbar {
+        height: 0;
+        width: 0;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        height: 0;
+        width: 0;
+      }
+
+      &::-webkit-scrollbar-track {
+        height: 0;
+        width: 0;
+      }
 
       li {
-        max-width: 257px;
-        min-width: 257px;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
@@ -136,6 +202,12 @@ export default {
             background-color: #f6f5f8;
             border-radius: 14px;
             margin-bottom: 30px;
+
+            &:hover,
+            :active {
+              cursor: pointer;
+              transform: scale(1.01);
+            }
           }
         }
       }
@@ -143,9 +215,12 @@ export default {
   }
 
   .wrapper-controls {
+    min-width: 100%;
+
     button {
+      min-width: 100%;
       align-self: flex-end;
-      margin: 100px 0 22px 0;
+      margin: 50px 0 22px 0;
       font-style: normal;
       font-weight: 500;
       font-size: 36px;
@@ -155,6 +230,7 @@ export default {
       border-radius: 15px;
       border: none;
       padding: 0 118px 0 118px;
+      cursor: pointer;
     }
   }
 }

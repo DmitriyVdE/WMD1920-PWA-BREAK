@@ -45,7 +45,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/axios.js'],
+  plugins: ['~/plugins/axios.js', '~/plugins/trimString.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -61,14 +61,16 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/proxy-module
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    // Doc:
+    'cookie-universal-nuxt'
   ],
   axios: {
     proxy: true
   },
   proxy: {
     '/api/': {
-      target: 'http://localhost:3000'
+      target: 'https://wmd-1920-pwa-break.appspot.com'
     }
   },
   /*

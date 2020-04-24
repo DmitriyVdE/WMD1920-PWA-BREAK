@@ -1,23 +1,22 @@
 <template>
-  <div class="wrapper-poll">
+  <div class="wrapper-join">
     <div class="wrapper-header">
-      <heading title="Create a poll"></heading>
+      <heading title="Join a group"></heading>
     </div>
 
     <div class="wrapper-controls">
-      <form @submit.prevent="validateForm" method="post">
+      <form @submit.prevent="validateForm" method="get">
         <custom-input
-          :value="form.question"
-          @input="form.question = $event"
-          placeholder="Poll"
-          icon-class="im im-question"
+          :value="form.groupCode"
+          @input="form.groupCode = $event"
+          placeholder="Code"
         ></custom-input>
 
         <error-list :errors="form.errors"></error-list>
 
         <button-with-background
-          id="btn-create"
-          text="Create"
+          id="btn-join"
+          text="Join"
         ></button-with-background>
       </form>
     </div>
@@ -33,7 +32,6 @@ import ErrorList from '@/components/ErrorList.vue'
 import { mapActions } from 'vuex'
 
 export default {
-  middleware: 'isGroupOwner',
   components: {
     Heading,
     ButtonWithBackground,
@@ -43,33 +41,40 @@ export default {
   data() {
     return {
       form: {
-        question: '',
+        groupCode: '',
         errors: []
       }
     }
   },
+  async mounted() {
+    await this.getUserId()
+  },
   methods: {
     ...mapActions({
-      createPoll: 'group/createPoll'
+      getGroupInfo: 'group/getGroupInfo',
+      getUserId: 'getUserId'
     }),
     validateForm() {
       this.clearFormErrors()
-      if (!this.form.question) {
-        this.form.errors.push('Question is required')
+      if (!this.form.groupCode) {
+        this.form.errors.push('Group code is required')
       } else this.submitForm()
     },
     clearFormErrors() {
       this.form.errors = []
     },
     submitForm() {
-      this.createPoll({
-        groupCode: this.$store.state.group.currentGroup.code,
-        userId: this.$store.state.auth.user.id,
-        question: this.form.question
-      }).then(() => {
-        this.$router.push(
-          `/groups/${this.$store.state.group.currentGroup.code}`
-        )
+      this.getGroupInfo({
+        groupCode: this.form.groupCode,
+        userId: this.$store.state.auth?.user.id
+      }).then((returned) => {
+        if (returned === undefined) {
+          this.$router.push(
+            `/groups/${this.$store.state.group.currentGroup.code}`
+          )
+        } else {
+          this.form.errors.push('Invalid group code.')
+        }
       })
     }
   }
@@ -77,7 +82,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper-poll {
+.wrapper-join {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -96,7 +101,7 @@ export default {
     justify-content: center;
     align-items: center;
 
-    #btn-create {
+    #btn-join {
       margin-top: 5rem;
     }
   }
