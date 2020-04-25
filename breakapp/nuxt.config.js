@@ -48,7 +48,11 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/axios.js', '~/plugins/trimString.js'],
+  plugins: [
+    '~/plugins/axios.js',
+    '~/plugins/trimString.js',
+    '~/plugins/pushnotifications.js'
+  ],
   /*
    ** Nuxt.js dev-modules
    */
