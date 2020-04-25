@@ -74,13 +74,16 @@ export default {
       this.form.errors = []
     },
     submitForm() {
-      this.createGroup({
+      const group = {
         groupName: this.form.groupName,
         password: this.form.password,
         userId: this.$store.state.auth?.user.id
-      }).then(() => {
+      }
+
+      this.createGroup(group).then(() => {
         // TODO: Check response code
         this.$router.push('/receive-code')
+        this.$sendGroupCreatedNotification(group)
       })
     }
   }
