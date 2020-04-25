@@ -1,6 +1,12 @@
 'use strict';
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+var io;
+
+
+exports.setupController = function(getIOInstance) {
+  io = getIOInstance();
+}
 
 exports.create_user = function(req, res) {
   var new_user = new User(req.body)

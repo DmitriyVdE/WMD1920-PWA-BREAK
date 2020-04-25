@@ -3,6 +3,11 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Group = mongoose.model('Group')
 const Question = mongoose.model('Question')
+var io;
+
+exports.setupController = function(getIOInstance) {
+  io = getIOInstance();
+}
 
 exports.get_group_questions = async function(req, res) {
   if (await checkGroupCodeExists(req.params.groupId) && await checkUserIdExists(req.params.userId)) {

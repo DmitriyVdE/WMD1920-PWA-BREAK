@@ -3,8 +3,16 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Group = mongoose.model('Group')
 const Question = mongoose.model('Question')
+var io;
+
+exports.setupController = function(getIOInstance) {
+  io = getIOInstance();
+}
 
 exports.create_group = async function(req, res) {
+  
+  io.to('ABCDEF').emit("blabla", 'testing controller');
+
   const temp = req.body
   if (!await checkUserIdExists(temp.userId) || temp.groupName == "" || temp.password == "" ) {
     res.status(400).send({ error: 'Please make sure you add a valid \'userId\', \'groupName\' and \'password\'.'})
