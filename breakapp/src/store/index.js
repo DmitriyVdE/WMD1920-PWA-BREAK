@@ -43,7 +43,7 @@ export const actions = {
 
   async createAnonymousUser({ commit }) {
     await this.$axios
-      .$post('/api/users')
+      .$post('https://wmd-1920-pwa-break.appspot.com/api/users')
       .then((response) => {
         return commit('setAuth', response.userId)
       })

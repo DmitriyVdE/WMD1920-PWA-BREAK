@@ -4,7 +4,8 @@
   "description": "API for the 'I want a break'-application",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "Break",

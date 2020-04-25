@@ -7,7 +7,7 @@
         tag="i"
         class="im im-arrow-left"
       ></nuxt-link>
-      <p class="subtitle">Disband group?</p>
+      <p class="subtitle">Kick all users?</p>
     </div>
 
     <div class="wrapper-controls">
@@ -20,11 +20,11 @@
           placeholder="Password"
         ></custom-input>
 
-        <error-list :errors="this.errors"></error-list>
+        <!--<error-list :errors="this.errors"></error-list>-->
 
         <button-with-background
           id="btn-create"
-          text="Disband"
+          text="Kick"
         ></button-with-background>
       </form>
     </div>
@@ -34,15 +34,15 @@
 <script>
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
 import CustomInput from '@/components/CustomInput.vue'
-import ErrorList from '@/components/ErrorList.vue'
+// import ErrorList from '@/components/ErrorList.vue'
 
 import { mapActions } from 'vuex'
 
 export default {
   components: {
     ButtonWithBackground,
-    CustomInput,
-    ErrorList
+    CustomInput // ,
+    // ErrorList
   },
   middleware: 'isGroupOwner',
   data() {
@@ -68,7 +68,7 @@ export default {
   methods: {
     ...mapActions({
       getGroupInfo: 'group/getGroupInfo',
-      commitDelete: 'group/deleteGroup'
+      commitKick: 'group/kickAllMembers'
     }),
     validateForm() {
       this.clearFormErrors()
@@ -80,15 +80,15 @@ export default {
       this.errors = []
     },
     submitForm() {
-      this.commitDelete({
+      this.commitKick({
         userId: this.userId,
         groupCode: this.id,
         password: this.password
       }).then((returned) => {
-        if (String(returned).includes('status code 400')) {
-          this.errors.push('Invalid password.')
+        if (returned === undefined) {
+          this.$router.push(`/groups/${this.id}`)
         } else {
-          this.$router.push(`/`)
+          this.errors.push('Invalid password.')
         }
       })
     }

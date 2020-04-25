@@ -1,36 +1,8 @@
-export default {
+/* eslint-disable */
+module.exports = {
   mode: 'universal',
-  pwa: {
-    manifest: {
-      name: 'Breakapp Raf Vanpuyvelde & Dmitriy Van der Elst',
-      short_name: 'Breakapp',
-      lang: 'en',
-      display: 'standalone'
-    }
-  },
-  workbox: {
-    runtimeCaching: [
-      {
-        urlPattern: 'https://fonts.googleapis.com/.*',
-        handler: 'cacheFirst',
-        method: 'GET',
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
-      },
-      {
-        urlPattern: 'https://fonts.gstatic.com/.*',
-        handler: 'cacheFirst',
-        method: 'GET',
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
-      },
-      {
-        urlPattern:
-          'https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js',
-        handler: 'cacheFirst',
-        method: 'GET',
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } }
-      }
-    ]
-  },
+  srcDir: 'src',
+  buildDir: 'functions/.nuxt',
   /*
    ** Headers of the page
    */
@@ -96,14 +68,6 @@ export default {
     // Doc:
     'cookie-universal-nuxt'
   ],
-  axios: {
-    proxy: true
-  },
-  proxy: {
-    '/api/': {
-      target: 'https://wmd-1920-pwa-break.appspot.com'
-    }
-  },
   /*
    ** Build configuration
    */
@@ -111,6 +75,7 @@ export default {
     /*
      ** You can extend webpack config here
      */
+    extractCSS: true,
     extend(config, ctx) {}
   }
 }

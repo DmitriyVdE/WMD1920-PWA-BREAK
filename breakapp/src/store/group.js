@@ -57,7 +57,7 @@ export const mutations = {
 export const actions = {
   async createGroup({ commit }, group) {
     const request = await this.$axios
-      .$post('/api/groups', group)
+      .$post('https://wmd-1920-pwa-break.appspot.com/api/groups', group)
       .then((response) => {
         commit('setCurrentGroup', { ...response, isOwner: true })
       })
@@ -70,7 +70,9 @@ export const actions = {
 
   async getGroupInfo({ commit }, { groupCode, userId }) {
     const request = await this.$axios
-      .$get(`/api/groups/${groupCode}/${userId}`)
+      .$get(
+        `https://wmd-1920-pwa-break.appspot.com/api/groups/${groupCode}/${userId}`
+      )
       .then((response) => {
         commit('setCurrentGroup', response)
       })
@@ -83,7 +85,10 @@ export const actions = {
 
   async createPoll({ commit }, question) {
     const request = await this.$axios
-      .$post(`/api/groups/${question.groupCode}/questions`, question)
+      .$post(
+        `https://wmd-1920-pwa-break.appspot.com/api/groups/${question.groupCode}/questions`,
+        question
+      )
       .then((response) => {
         commit('setNewQuestion', response)
       })
@@ -97,7 +102,7 @@ export const actions = {
   async addVote({ commit }, voteInfo) {
     const request = await this.$axios({
       method: 'POST',
-      url: `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
+      url: `https://wmd-1920-pwa-break.appspot.com/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
       data: voteInfo
     })
       .then((response) => {
@@ -113,7 +118,7 @@ export const actions = {
   async removeVote({ commit }, voteInfo) {
     const request = await this.$axios({
       method: 'DELETE',
-      url: `/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
+      url: `https://wmd-1920-pwa-break.appspot.com/api/groups/${voteInfo.groupCode}/questions/${voteInfo.questionId}`,
       data: voteInfo
     })
       .then((response) => {
@@ -132,7 +137,10 @@ export const actions = {
 
   async editGroup({ commit }, group) {
     const request = await this.$axios
-      .$put(`/api/groups/${group.groupCode}`, group)
+      .$put(
+        `https://wmd-1920-pwa-break.appspot.com/api/groups/${group.groupCode}`,
+        group
+      )
       .then(() => {
         commit('setCurrentGroup', { name: group.name })
       })
@@ -147,7 +155,10 @@ export const actions = {
 
   async kickAllMembers({ commit }, group) {
     const request = await this.$axios
-      .$delete(`/api/groups/${group.groupCode}/users`, group)
+      .$delete(
+        `https://wmd-1920-pwa-break.appspot.com/api/groups/${group.groupCode}/users`,
+        group
+      )
       .then(() => {
         commit('setCurrentGroup', { userCount: 1 })
       })
@@ -160,7 +171,10 @@ export const actions = {
 
   async deleteGroup({ commit }, group) {
     const request = await this.$axios
-      .$delete(`/api/groups/${group.groupCode}`, group)
+      .$delete(
+        `https://wmd-1920-pwa-break.appspot.com/api/groups/${group.groupCode}`,
+        group
+      )
       .then(() => {
         const currentGroups = this.state.groups
         const indexOfgroupToBeDeleted = currentGroups.findIndex((g) => {
