@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const socketManager = require('./sockets/manager');
+const socketManager = require("./sockets/manager");
 
 // socket.io stuff
 var http = require("http").createServer(app);
@@ -46,4 +46,4 @@ const server = http.listen(PORT, () => {
   console.log(`PWA Break API listening at http://${host}:${port}`);
 });
 
-module.exports = http
+module.exports = http;
