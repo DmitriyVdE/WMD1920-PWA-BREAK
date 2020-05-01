@@ -11,6 +11,7 @@
 
 <script>
 /* eslint-disable */
+/*
 export default {
   data() {
     return {
@@ -79,6 +80,7 @@ export default {
     }
   }
 }
+*/
 </script>
 
 <style>

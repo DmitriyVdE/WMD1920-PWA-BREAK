@@ -20,7 +20,7 @@
           placeholder="Password"
         ></custom-input>
 
-        <!--<error-list :errors="this.errors"></error-list>-->
+        <error-list :errors="errors"></error-list>
 
         <button-with-background
           id="btn-create"
@@ -34,15 +34,15 @@
 <script>
 import ButtonWithBackground from '@/components/ButtonWithBackground.vue'
 import CustomInput from '@/components/CustomInput.vue'
-// import ErrorList from '@/components/ErrorList.vue'
+import ErrorList from '@/components/ErrorList.vue'
 
 import { mapActions } from 'vuex'
 
 export default {
   components: {
     ButtonWithBackground,
-    CustomInput // ,
-    // ErrorList
+    CustomInput,
+    ErrorList
   },
   middleware: 'isGroupOwner',
   data() {

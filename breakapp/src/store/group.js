@@ -170,11 +170,11 @@ export const actions = {
   },
 
   async deleteGroup({ commit }, group) {
-    const request = await this.$axios
-      .$delete(
-        `https://wmd-1920-pwa-break.appspot.com/api/groups/${group.groupCode}`,
-        group
-      )
+    const request = await this.$axios({
+      method: 'DELETE',
+      url: `https://wmd-1920-pwa-break.appspot.com/api/groups/${group.groupCode}`,
+      data: group
+    })
       .then(() => {
         const currentGroups = this.state.groups
         const indexOfgroupToBeDeleted = currentGroups.findIndex((g) => {
