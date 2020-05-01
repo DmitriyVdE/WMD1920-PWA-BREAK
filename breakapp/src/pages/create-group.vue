@@ -6,11 +6,7 @@
 
     <div class="wrapper-controls">
       <form @submit.prevent="validateForm" method="post">
-        <custom-input
-          :value="form.groupName"
-          @input="form.groupName = $event"
-          placeholder="Name"
-        ></custom-input>
+        <custom-input :value="form.groupName" @input="form.groupName = $event" placeholder="Name"></custom-input>
 
         <custom-input
           id="input-password"
@@ -22,10 +18,7 @@
 
         <error-list :errors="form.errors"></error-list>
 
-        <button-with-background
-          id="btn-create"
-          text="Create"
-        ></button-with-background>
+        <button-with-background id="btn-create" text="Create"></button-with-background>
       </form>
     </div>
   </div>
@@ -83,7 +76,8 @@ export default {
       this.createGroup(group).then(() => {
         // TODO: Check response code
         this.$router.push('/receive-code')
-        this.$sendGroupCreatedNotification(group)
+
+        if (!$nuxt.isOffline) this.$sendGroupCreatedNotification(group)
       })
     }
   }

@@ -1,87 +1,13 @@
 <template>
   <div>
-    <div :class="isOnline ? 'green' : 'red'">
-      Awesome Vue.js PWA
-      <b>{{ isOnline ? 'is Online' : 'is Offline' }}</b>
+    <div class="connection-status" :class="!$nuxt.isOffline ? 'green' : 'red'">
+      Breakapp PWA
+      <b>{{ !$nuxt.isOffline ? 'is Online' : 'is Offline' }}</b>
     </div>
 
     <nuxt />
   </div>
 </template>
-
-<script>
-/* eslint-disable */
-/*
-export default {
-  data() {
-    return {
-      isOnline: window.navigator.onLine,
-      notificationsSupported: false
-    }
-  },
-  methods: {
-    askPermission() {
-      if (this.notificationsSupported) {
-        Notification.requestPermission((result) => {
-          console.log('result from permission question', result)
-          if (result !== 'granted') {
-            alert('You probably do not like notifications?!')
-          } else {
-            console.log(
-              `A notification will be send from the service worker => This only works in production`
-            )
-          }
-        })
-      }
-    },
-    offlineNotification() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready // returns a Promise, the active SW registration
-          .then((swreg) =>
-            swreg.showNotification('Application offline', {
-              body: `Hey, we'll be back`,
-              icon: '/img/icons/unicorn-offline-600x600.png',
-              image: '/img/icons/unicorn-offline-600x600.png',
-              vibrate: [300, 200, 300],
-              badge: '/img/icons/unicorn-offline-600x600.png'
-            })
-          )
-      }
-    },
-    onlineNotification() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready // returns a Promise, the active SW registration
-          .then((swreg) =>
-            swreg.showNotification('Application online', {
-              body: `Hey, we're back!`,
-              icon: '/img/icons/unicorn-630x630.jpg',
-              image: '/img/icons/unicorn-630x630.jpg',
-              vibrate: [300, 200, 300],
-              badge: '/img/icons/unicorn-630x630.jpg'
-            })
-          )
-      }
-    },
-    established() {
-      if ('Notification' in window && 'serviceWorker' in navigator) {
-        this.notificationsSupported = true
-      }
-
-      this.askPermission()
-
-      window.addEventListener('online', () => {
-        this.isOnline = true
-        this.onlineNotification()
-      })
-      window.addEventListener('offline', () => {
-        this.isOnline = false
-        this.offlineNotification()
-      })
-    }
-  }
-}
-*/
-</script>
 
 <style>
 html {
@@ -130,5 +56,23 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+.connection-status {
+  z-index: 999;
+  position: absolute;
+  width: 100vw;
+}
+
+.green {
+  color: #fff;
+  padding: 5px;
+  background-color: lightgreen;
+}
+
+.red {
+  color: #fff;
+  padding: 5px;
+  background-color: tomato;
 }
 </style>
