@@ -154,11 +154,11 @@ export const actions = {
   clearVotes({ commit }) {},
 
   async kickAllMembers({ commit }, group) {
-    const request = await this.$axios
-      .$delete(
-        `https://wmd-1920-pwa-break.appspot.com/api/groups/${group.groupCode}/users`,
-        group
-      )
+    const request = await this.$axios({
+      method: 'DELETE',
+      url: `https://wmd-1920-pwa-break.appspot.com/api/groups/${group.groupCode}/users`,
+      data: group
+    })
       .then(() => {
         commit('setCurrentGroup', { userCount: 1 })
       })
