@@ -22,3 +22,12 @@ Technische vereisten:
     - PWA Feature:
         - Eerder bezochte groepen offline zichtbaar
     - Notificaties via service worker
+
+COMMANDO'S:
+yarn build:firebase
+yarn start:firebase
+And to deploy:
+yarn build:firebase
+yarn deploy
+Tho, for development, you can still use
+yarn dev
