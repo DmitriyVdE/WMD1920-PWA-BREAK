@@ -11,7 +11,7 @@
     </h1>
     <div class="wrapper-colored-bar"></div>
     <div class="wrapper-groups">
-      <ul v-if="groups.length">
+      <ul v-if="groups">
         <li v-for="group in groups" :key="group.id">
           <nuxt-link :to="`/groups/${group.code}`" tag="p">{{
             group.name | trimString(16)
@@ -42,7 +42,6 @@
 import ButtonNoBackground from '@/components/ButtonNoBackground.vue'
 
 export default {
-  middleware: 'isGroupOwner',
   components: {
     ButtonNoBackground
   },
